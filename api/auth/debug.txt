@@ -1,0 +1,12 @@
+Array
+(
+    [CinMembre] => H54345
+    [Nom] => Khouri
+    [Prenom] => Hania
+    [DateNaissance] => 1995-01-01
+    [Adresse] => 87 rue 18 octobre haydokkala el jadida
+    [Email] => deloin@hotmail.fr
+    [Tel] => 0700000000
+    [IdNiveau] => 1
+    [IdFiliere] => TSGE
+)
