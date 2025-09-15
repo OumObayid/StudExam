@@ -1,0 +1,22 @@
+.navbar {
+  background-color: var(--marron-fonce) !important;
+}
+.navbar .nav-link, .navbar .navbar-brand,.navbar-toggler .navbar-toggler-icon {
+  color: var(--gris) !important;
+}
+.navbar .nav-link:hover,.navbar .navbar-brand:hover,.navbar-toggler:hover {
+  color: var(--dore) !important;
+}
+.navbar .navbar-brand {
+  font-weight: bold;
+}
+
+
+.navbar-collapse {
+  justify-content: flex-end;
+}
+   
+#navbarNav {
+  transition: height 0.3s ease, opacity 0.3s ease;
+  
+}

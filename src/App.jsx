@@ -1,4 +1,4 @@
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, HashRouter } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes";
 import { useEffect } from "react";
 import { getAllFilieres } from "./services/filiere";
@@ -8,6 +8,7 @@ import { setNiveaux } from "./redux/niveauSlice";
 import { useDispatch } from "react-redux";
 function App() {
     const dispatch = useDispatch();
+  
   useEffect(() => {
   const fetchData = async () => {
     try {

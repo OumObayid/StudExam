@@ -35,12 +35,9 @@ import MesExamens from "../pages/student/MesExamens";
 import Statistiques from "../pages/student/MesStatistiques";
 import PasserExamen from "../pages/student/PasserExamen";
 import Profil from "../pages/student/Profil";
+import Contact from "../pages/Contact";
 
-// Generic / actions
-import ActionApprouver from "../pages/generic/ActionApprouver";
-import ActionGerer from "../pages/generic/ActionGerer";
-import AfficherErreurs from "../pages/generic/AfficherErreurs";
-import Redirection from "../pages/generic/Redirection";
+
 
 
 export default function AppRoutes() {
@@ -51,6 +48,7 @@ export default function AppRoutes() {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/contact" element={<Contact />} />
             </Route>
 
             {/* Pages Admin */}
@@ -99,13 +97,6 @@ export default function AppRoutes() {
                 
             </Route>
 
-            {/* Pages Generic / Actions */}
-            <Route path="/generic/*">
-                <Route path="action-approuver" element={<ActionApprouver />} />
-                <Route path="action-gerer" element={<ActionGerer />} />
-                <Route path="afficher-erreurs" element={<AfficherErreurs />} />
-                <Route path="redirection" element={<Redirection />} />
-            </Route>
         </Routes>
     );
 }
