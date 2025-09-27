@@ -1,0 +1,5 @@
+.footer{
+background-color: var(--marron-fonce);
+color: var(--gris) !important;
+z-index: 1080;
+}

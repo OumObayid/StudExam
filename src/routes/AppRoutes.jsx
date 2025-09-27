@@ -1,3 +1,5 @@
+import React from "react";
+
 import { Routes, Route } from "react-router-dom";
 
 // Layouts
@@ -7,96 +9,133 @@ import InstructorLayout from "../layouts/InstructorLayout";
 import StudentLayout from "../layouts/StudentLayout";
 
 // Pages publiques
-import Home from "../pages/Home";
+import Home from "../pages/public/Home";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
+import Contact from "../pages/public/Contact";
 // Admin pages
-import AdminDashboard from "../pages/admin/Dashboard";
-import AjoutMembre from "../pages/admin/AjoutMembre";
-import AffModCompte from "../pages/admin/AffModCompte";
-import Approuver from "../pages/admin/Approuver";
-import Gerer from "../pages/admin/Gerer";
-import GestionSite from "../pages/admin/GestionSite";
-import ValiderModifierCompte from "../pages/admin/ValiderModifierCompte";
-import ValiderModifierGestionSite from "../pages/admin/ValiderModifierGestionSite";
-
+import DashboardAdmin from "../pages/admin/DashboardAdmin";
+import GestionExamen from "../pages/admin/GestionExamen";
+import GestionInstructor from "../pages/admin/GestionInstructor";
+import GestionStudent from "../pages/admin/GestionStudent";
+import ExamenDetailAdmin from "../pages/admin/ExamenDetailAdmin";
+import GestionNote from "../pages/admin/GestionNote";
+import GestionNiveau from "../pages/admin/GestionNiveau";
+import GestionFiliere from "../pages/admin/GestionFiliere";
+import GestionModule from "../pages/admin/GestionModule";
+import ModifierNiveau from "../pages/admin/ModifierNiveau";
+import ModifierFiliere from "../pages/admin/ModifierFiliere";
+import ModifierModule from "../pages/admin/ModifierModule";
 // Instructor pages
-import InstructorDashboard from "../pages/instructor/Dashboard";
-import CreerExamen from "../pages/instructor/CreerExamen";
-import CreerQuestion from "../pages/instructor/CreerQuestion";
-import ExamensCrees from "../pages/instructor/ExamensCrees";
-import ActionModifierQuestion from "../pages/instructor/ActionModifierQuestion";
-import AfficherModifierQuestionInstr from "../pages/instructor/AfficherModifierQuestionInstr";
+import DashboardInstructor from "../pages/instructor/DashboardInstructor";
+import ProfilInstructor from "../pages/instructor/ProfilInstructor";
+import GestionExamens from "../pages/instructor/GestionExamens";
+import AffExamen from "../pages/instructor/AffExamen";
 import ModifierExamen from "../pages/instructor/ModifierExamen";
-
+import CreerExamen from "../pages/instructor/CreerExamen";
+import CreerQuestions from "../pages/instructor/CreerQuestions";
+import AfficherQuestions from "../pages/instructor/afficherQuestions";
+import ModifierQuestion from "../pages/instructor/ModifierQuestion";
+import AfficherInstructor from "../pages/admin/AfficherInstructor";
+import GestionAffectation from "../pages/admin/GestionAffectation";
 // Student pages
-import StudentDashboard from "../pages/student/Dashboard";
+import DashboardStudent from "../pages/student/DashboardStudent";
+import ProfilStudent from "../pages/student/ProfilStudent";
 import MesExamens from "../pages/student/MesExamens";
-import Statistiques from "../pages/student/MesStatistiques";
 import PasserExamen from "../pages/student/PasserExamen";
-import Profil from "../pages/student/Profil";
-import Contact from "../pages/Contact";
+import ProtectedRoute from "./ProtectedRoute";
+import Unauthorized from "../pages/Unauthorized";
 
+//page non trouvée
+import NotFound from "../pages/public/notFound/NotFound";
+import AfficherStudent from "../pages/admin/AfficherStudent";
+import MesResultats from "../pages/student/MesResultats";
 
 
 
 export default function AppRoutes() {
-    return (
-        <Routes>
-            {/* Pages publiques */}
-            <Route element={<PublicLayout />}>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/contact" element={<Contact />} />
-            </Route>
+  return (
+    <Routes>
+      {/* Pages publiques */}
+      <Route element={<PublicLayout />}>
+        <Route index element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
+      </Route>
 
-            {/* Pages Admin */}
-            <Route path="/admin/*" element={<AdminLayout />}>
-                <Route path="dashboard" element={<AdminDashboard />} />
-                <Route path="ajout-membre" element={<AjoutMembre />} />
-                <Route path="aff-mod-compte" element={<AffModCompte />} />
-                <Route path="approuver" element={<Approuver />} />
-                <Route path="gerer" element={<Gerer />} />
-                <Route path="gestion-site" element={<GestionSite />} />
-                <Route
-                    path="valider-mod-compte"
-                    element={<ValiderModifierCompte />}
-                />
-                <Route
-                    path="valider-mod-gestion-site"
-                    element={<ValiderModifierGestionSite />}
-                />
-                <Route path="statistiques" element={<Statistiques />} />
-            </Route>
+      {/* Pages Admin */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute typesMembre={["Admin"]}>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<DashboardAdmin />} />
+        <Route path="dashboard" element={<DashboardAdmin />} />
+        <Route path="gest-niveau" element={<GestionNiveau />} />
+        <Route path="mod-niveau/:idParams" element={<ModifierNiveau />} />
+        <Route path="gest-filiere" element={<GestionFiliere />} />
+        <Route path="mod-filiere/:idParams" element={<ModifierFiliere />} />
+        <Route path="gest-module" element={<GestionModule />} />
+        <Route path="mod-module/:idParams" element={<ModifierModule />} />
+        <Route path="gest-instructor" element={<GestionInstructor />} />
+        <Route path="aff-instr/:idParams" element={<AfficherInstructor />} />
+        <Route path="gest-affect" element={<GestionAffectation />} />
+        <Route path="gest-student" element={<GestionStudent />} />
+        <Route path="aff-stud/:idParams" element={<AfficherStudent />} />
+        <Route path="gest-examen" element={<GestionExamen />} />
+        <Route
+          path="detail-examen-admin/:idParams"
+          element={<ExamenDetailAdmin />}
+        />
+        <Route path="gest-note" element={<GestionNote />} />
+      </Route>
 
-            {/* Pages Instructor */}
-            <Route path="/instructeur/*" element={<InstructorLayout />}>
-                <Route path="dashboard" element={<InstructorDashboard />} />
-                <Route path="creer-examen" element={<CreerExamen />} />
-                <Route path="creer-question" element={<CreerQuestion />} />
-                <Route path="examens-crees" element={<ExamensCrees />} />
-                <Route
-                    path="action-mod-question"
-                    element={<ActionModifierQuestion />}
-                />
-                <Route
-                    path="aff-mod-question-instr"
-                    element={<AfficherModifierQuestionInstr />}
-                />
-                <Route path="modifier-examen" element={<ModifierExamen />} />
-            </Route>
+      {/* Pages Instructor */}
+      <Route
+        path="/instructor"
+        element={
+          <ProtectedRoute typesMembre={["Instructor"]}>
+            <InstructorLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<DashboardInstructor />} />
+        <Route path="dashboard" element={<DashboardInstructor />} />
+        <Route path="profil-instructor" element={<ProfilInstructor />} />
+        <Route path="gest-examens" element={<GestionExamens />} />
+        <Route path="creer-examen" element={<CreerExamen />} />
+        <Route path="mod-examen/:IdExamen" element={<ModifierExamen />} />
+        <Route path="aff-examen/:idParams" element={<AffExamen />} />
 
-            {/* Pages Student */}
-            <Route path="/etudiant/*" element={<StudentLayout />}>
-                <Route path="dashboard" element={<StudentDashboard />} />
-                <Route path="profil" element={<Profil />} />
-                <Route path="mes-examens" element={<MesExamens />} />
-                <Route path="statistiques" element={<Statistiques />} />
-                <Route path="passer-examen/:idExamen" element={<PasserExamen />} />
-                
-            </Route>
+        <Route path="creer-questions/:IdExamen" element={<CreerQuestions />} />
+        <Route path="aff-questions/:IdExamen" element={<AfficherQuestions />} />
+        <Route path="mod-questions/:IdExamen" element={<ModifierQuestion />} />
+      </Route>
 
-        </Routes>
-    );
+      {/* Pages Student */}
+      <Route
+        path="/student"
+        element={
+          <ProtectedRoute typesMembre={["Student"]}>
+            <StudentLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<DashboardStudent />} />
+        <Route path="dashboard" element={<DashboardStudent />} />
+        <Route path="profil-student" element={<ProfilStudent />} />
+        <Route path="mes-examens" element={<MesExamens />} />
+        <Route path="mes-resultats" element={<MesResultats />} />
+        <Route path="passer-examen/:IdExamen" element={<PasserExamen />} />
+      </Route>
+
+      {/* Route NotFound */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
 }

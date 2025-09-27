@@ -24,18 +24,19 @@ if (!$data || !isset($data['CinMembre'])) {
     exit;
 }
 
-// Récupérer les examens que l'utilisateur a passés ou non
+// 🔹 Nouvelle requête adaptée : on ne prend plus IdFiliere / IdNiveau depuis Examen
 $sql = "
 SELECT 
     e.IdExamen, e.DescriptionE, e.NbrQuestionsE, e.NotePourQuestion, e.DurationE, 
-    e.DateDebutE, e.DateFinE, e.PublieE, e.IdModule, m.NomModule, m.DescriptionModule, 
-    e.IdFiliere, f.NomFiliere AS Filiere, e.IdNiveau, n.NomNiveau AS Niveau
+    e.DateDebutE, e.DateFinE, e.PublieE, e.IdModule, 
+    m.NomModule, m.DescriptionModule, 
+    f.NomFiliere AS Filiere, n.NomNiveau AS Niveau
 FROM Examen e
-LEFT JOIN Module m ON e.IdModule = m.IdModule
-LEFT JOIN Filiere f ON e.IdFiliere = f.IdFiliere
-LEFT JOIN Niveau n ON e.IdNiveau = n.IdNiveau
-WHERE e.IdFiliere = (SELECT IdFiliere FROM Membre WHERE CinMembre = ?)
-  AND e.IdNiveau = (SELECT IdNiveau FROM Membre WHERE CinMembre = ?)
+INNER JOIN Module m ON e.IdModule = m.IdModule
+INNER JOIN Filiere f ON m.IdFiliere = f.IdFiliere
+INNER JOIN Niveau n ON m.IdNiveau = n.IdNiveau
+WHERE m.IdFiliere = (SELECT IdFiliere FROM Membre WHERE CinMembre = ?)
+  AND m.IdNiveau = (SELECT IdNiveau FROM Membre WHERE CinMembre = ?)
   AND e.PublieE = 'oui'
 ORDER BY e.DateDebutE DESC
 ";
@@ -61,11 +62,20 @@ while ($row = $result->fetch_assoc()) {
     $res = $stmtResult->get_result();
     if ($res->num_rows > 0) {
         $scoreRow = $res->fetch_assoc();
-        $row['ScoreR'] = $scoreRow['ScoreR']; // ajouter le score
+        $row['ScoreR'] = $scoreRow['ScoreR'];
     } else {
-        $row['ScoreR'] = null; // pas encore passé
+        $row['ScoreR'] = null;
     }
     $stmtResult->close();
+
+    // Vérifier la passation pour cet examen et ce membre
+    $sqlPass = "SELECT 1 FROM Passation WHERE IdExamenP = ? AND CinMembreP = ? LIMIT 1";
+    $stmtPass = $conn->prepare($sqlPass);
+    $stmtPass->bind_param("is", $row['IdExamen'], $data['CinMembre']);
+    $stmtPass->execute();
+    $resPass = $stmtPass->get_result();
+    $row['IsPassed'] = $resPass->num_rows > 0 ? true : false;
+    $stmtPass->close();
 
     $examens[] = $row;
 }

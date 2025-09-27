@@ -1,0 +1,11 @@
+.toggle-container {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+}
+
+.toggle-container.show {
+  max-height: 2000px; /* assez grand pour contenir toutes les questions */
+  opacity: 1;
+}

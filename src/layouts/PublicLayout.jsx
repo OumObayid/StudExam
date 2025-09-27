@@ -1,7 +1,8 @@
+import React from "react";
 import Navbar from "../components/navbar/Navbar";
-import Footer from "../components/Footer";
 import { Outlet } from "react-router-dom";
-
+import "./layout.css"
+import Footer from "../components/footer/Footer";
 export default function PublicLayout() {
   return (
     <div
@@ -19,8 +20,11 @@ export default function PublicLayout() {
       <Navbar />
 
       {/* Contenu principal */}
-      <main className="flex-grow d-flex justify-content-center align-items-center py-5">
-        <div className="bg-white border shadow p-5 w-100" style={{ maxWidth: "80%" }}>
+      <main className="main-outlet main flex-grow d-flex justify-content-center align-items-center py-3 py-md-4      
+      "
+      style={{ minHeight:"78vh"}}
+      >
+        <div className="bg-white border shadow px-2 py-4 p-md-4 w-100" style={{ maxWidth: window.innerWidth >= 768 ? "80%" : "90%" }}>
           <Outlet />
         </div>
       </main>

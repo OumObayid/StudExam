@@ -1,0 +1,95 @@
+.layout {
+  background-color: var(--marron-clear) !important;
+  padding: auto 0 !important;
+  margin-top: 50px;
+}
+.accordion .accordion-item,.accordion-button{
+  background-color: var(--marron-clear) !important;
+      color: var(--marron-fonce) !important;
+
+}
+
+.accordion-collapse{
+  background-color: var(--marron-clear1);
+  border: 0;
+}
+
+.accordion-button::after{
+      width: 15px !important;
+    height: 15px !important;
+    background-size: 15px !important;
+}
+/* Supprimer aussi le focus/contour bleu sur tous les liens du sidebar */
+.layout .nav-link:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Quand un accordion est ouvert, éviter que la bordure par défaut apparaisse */
+.layout .accordion-button:not(.collapsed) {
+  box-shadow: none !important;
+  border: none !important;
+}
+
+
+.layout span {
+  color: var(--marron-clear2) !important;
+}
+.layout li {
+  margin: 0 !important;
+  
+}
+.layout .nav-link {
+  color: var(--marron-fonce) !important;
+  padding: 10px 20px;
+      color: var(--marron-fonce) !important;
+
+}
+.layout .nav-link.active {
+  background-color: var(--marron-clear2);
+  color: var(--marron-fonce) !important;
+}
+.layout .accordion-button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+    color: var(--marron-fonce) !important;
+
+}
+/* Hover uniquement sur desktop */
+@media (min-width: 768px) {
+  .layout .nav-link:hover {
+    color: white !important;
+    background-color: var(--marron) !important;
+  }
+
+}
+
+  main.main-outlet {
+    margin-top: 58px ;
+    min-height: 85vh !important;
+  }
+
+.layout hr {
+  height: 2px !important; /* épaisseur */
+  background-color: var(--marron); /* couleur gris bootstrap */
+  border: none; /* sinon la bordure par défaut reste visible */
+  margin-bottom: 0;
+}
+
+/* pour le badje sur le menu */
+.exam-badge {
+  background-color: var(--danger);
+  color: #fff;
+  border-radius: 50%;
+  padding: 0.4rem 0.4rem;
+  font-size: 0.85rem;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.4rem;
+  height: 1.4rem;
+}
+

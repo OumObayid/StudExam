@@ -1,0 +1,53 @@
+.swal2-confirm,.swal2-cancel {
+  padding: 7px 20px; 
+  cursor: pointer;
+  border-radius: 15px;  border: none; 
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 5px 0px 0px #3c2c31;
+  cursor: pointer;
+  transition: all 1s;
+}
+.swal2-confirm{
+     background: var(--danger);
+}
+.swal2-cancel{
+     background: var(--gris);
+}
+.swal2-confirm:hover,.swal2-cancel:hover {
+  box-shadow: none;
+  transform: translateY(5px);
+  transition: all 0.1s linear;
+  color: white !important;
+}
+.swal2-confirm:focus,.swal2-cancel:focus {
+  outline: transparent;
+}
+
+
+.swal2-popup {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden; /* pour que le pseudo-élément reste à l’intérieur */
+  padding: 1.25rem;
+  background: white;
+}
+
+/* Bordure sophistiquée avec pseudo-élément */
+.swal2-popup::before {
+  content: "";
+  position: absolute;
+  inset: 0; /* top:0; left:0; right:0; bottom:0 */
+  border-radius: 10px;
+  padding: 4px; /* épaisseur de la bordure */
+  background: linear-gradient(45deg, var(--danger), var(--dore), var(--vert-olive));
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude; 
+  pointer-events: none;
+}
+
+

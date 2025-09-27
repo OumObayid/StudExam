@@ -19,34 +19,26 @@ if ($conn->connect_error) {
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (!$data || !isset($data['CinMembre'])) {
+// Vérification directe des champs obligatoires
+if (empty($data['CinMembre']) || empty($data['Nom']) || empty($data['Prenom']) ||
+    empty($data['DateNaissance']) || empty($data['Adresse']) || empty($data['Email']) ||
+    empty($data['Tel'])
+) {
     http_response_code(400);
-    echo json_encode(["success" => false, "message" => "Données invalides"]);
+    echo json_encode(["success" => false, "message" => "Certains champs obligatoires sont manquants ou vides"]);
     exit;
 }
 
-// Conversion de la date en format YYYY-MM-DD si nécessaire
-$dateNaissance = null;
-if (!empty($data['DateNaissance'])) {
-    $timestamp = strtotime($data['DateNaissance']);
-    if ($timestamp !== false) {
-        $dateNaissance = date('Y-m-d', $timestamp);
-    } else {
-        $dateNaissance = null;
-    }
-}
+// Conversion de la date
+$dateNaissance = strtotime($data['DateNaissance']) !== false
+    ? date('Y-m-d', strtotime($data['DateNaissance']))
+    : null;
 
-// Préparer la requête pour mise à jour
+// Préparer la requête UPDATE
 $stmt = $conn->prepare("
     UPDATE Membre SET
-        Nom = ?,
-        Prenom = ?,
-        DateNaissance = ?,
-        Adresse = ?,
-        Email = ?,
-        Tel = ?,
-        IdNiveau = ?,
-        IdFiliere = ?
+        Nom = ?, Prenom = ?, DateNaissance = ?, Adresse = ?,
+        Email = ?, Tel = ?, IdNiveau = ?, IdFiliere = ?
     WHERE CinMembre = ?
 ");
 
@@ -56,7 +48,10 @@ if (!$stmt) {
     exit;
 }
 
-// Bind des paramètres : tout en string sauf IdNiveau et IdFiliere (int)
+// IdNiveau et IdFiliere facultatifs
+$idNiveau = !empty($data['IdNiveau']) ? $data['IdNiveau'] : null;
+$idFiliere = !empty($data['IdFiliere']) ? $data['IdFiliere'] : null;
+
 $stmt->bind_param(
     "ssssssiss",
     $data['Nom'],
@@ -65,18 +60,25 @@ $stmt->bind_param(
     $data['Adresse'],
     $data['Email'],
     $data['Tel'],
-    $data['IdNiveau'],
-    $data['IdFiliere'],
+    $idNiveau,
+    $idFiliere,
     $data['CinMembre']
 );
 
-// Exécution
 if ($stmt->execute()) {
-    echo json_encode(["success" => true, "message" => "Profil mis à jour avec succès"]);
+    $stmt->close();
+
+    $stmt2 = $conn->prepare("SELECT * FROM Membre WHERE CinMembre = ?");
+    $stmt2->bind_param("s", $data['CinMembre']);
+    $stmt2->execute();
+    $result = $stmt2->get_result();
+    $user = $result->fetch_assoc();
+    $stmt2->close();
+
+    echo json_encode(["success" => true, "message" => "Profil mis à jour avec succès", "user" => $user]);
 } else {
     http_response_code(500);
     echo json_encode(["success" => false, "message" => "Erreur lors de la mise à jour"]);
 }
 
-$stmt->close();
 $conn->close();

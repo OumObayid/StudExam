@@ -10,6 +10,8 @@ ini_set('display_errors', 1);
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') exit(0);
 
 $config = include __DIR__ . '/../config.php';
+
+// Connexion DB
 $conn = new mysqli($config['db_host'], $config['db_user'], $config['db_pass'], $config['db_name']);
 if ($conn->connect_error) {
     http_response_code(500);
@@ -25,25 +27,33 @@ if (empty($data['CinMembre']) || empty($data['Password'])) {
     exit;
 }
 
-$cin = $conn->real_escape_string($data['CinMembre']);
-$pwd = $conn->real_escape_string($data['Password']);
+$cin = $data['CinMembre'];
+$pwd = $data['Password'];
 
-$sql = "SELECT CinMembre, Password, Nom, Prenom, DateNaissance, Adresse, Email, Tel, TypeMembre, IdNiveau, IdFiliere, ApprouveM 
-        FROM Membre 
-        WHERE CinMembre='$cin' AND Password='$pwd' AND ApprouveM='oui'";
-$result = $conn->query($sql);
+// Requête pour récupérer l'utilisateur
+$stmt = $conn->prepare("SELECT CinMembre, Password, Nom, Prenom, DateNaissance, Adresse, Email, Tel, TypeMembre, IdNiveau, IdFiliere, ApprouveM
+                        FROM Membre
+                        WHERE CinMembre = ?");
+$stmt->bind_param("s", $cin);
+$stmt->execute();
+$result = $stmt->get_result();
 
 if ($result && $result->num_rows > 0) {
     $user = $result->fetch_assoc();
-    unset($user['Password']); // ne jamais renvoyer le mot de passe
-    echo json_encode([
-        "success" => true,
-        "user" => $user
-    ]);
+
+    // Vérifier le mot de passe
+    if (password_verify($pwd, $user['Password'])) {
+        unset($user['Password']); // ne jamais renvoyer le mot de passe
+        echo json_encode(["success" => true, "user" => $user]);
+    } else {
+        http_response_code(401);
+        echo json_encode(["success" => false, "message" => "CIN ou mot de passe incorrect"]);
+    }
+
 } else {
     http_response_code(401);
-    echo json_encode(["success" => false, "message" => "CIN ou mot de passe incorrect / non approuvé"]);
+    echo json_encode(["success" => false, "message" => "CIN ou mot de passe incorrect"]);
 }
 
+$stmt->close();
 $conn->close();
-?>

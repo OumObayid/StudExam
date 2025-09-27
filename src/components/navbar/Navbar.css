@@ -1,13 +1,18 @@
 .navbar {
+  position: fixed !important;
+  z-index: 1050 !important; 
+  top:0;
+  width: 100%;
   background-color: var(--marron-fonce) !important;
 }
-.navbar .nav-link, .navbar .navbar-brand,.navbar-toggler .navbar-toggler-icon {
+.navbar .nav-link, .navbar-toggler .navbar-toggler-icon {
   color: var(--gris) !important;
 }
 .navbar .nav-link:hover,.navbar .navbar-brand:hover,.navbar-toggler:hover {
   color: var(--dore) !important;
 }
 .navbar .navbar-brand {
+  color:var(--dore);
   font-weight: bold;
 }
 
@@ -20,3 +25,5 @@
   transition: height 0.3s ease, opacity 0.3s ease;
   
 }
+
+
