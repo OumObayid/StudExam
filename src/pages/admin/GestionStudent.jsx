@@ -95,7 +95,7 @@ export default function GestionStudent() {
         content={
           <>
             <div className="row">
-              <div className="col-12 col-md-4">
+              <div className="col-12 col-md-6">
                 <select
                   className="form-select px-1 px-md-3"
                   value={selectedFiliere}
@@ -109,7 +109,7 @@ export default function GestionStudent() {
                   ))}
                 </select>
               </div>
-              <div className="col-12 col-md-4">
+              <div className="col-12 col-md-6">
                 <select
                   className="form-select px-1 px-md-3"
                   value={selectedNiveau}
@@ -122,21 +122,21 @@ export default function GestionStudent() {
                     </option>
                   ))}
                 </select>
-              </div>
-              <div className="col-12 col-md-4">
+              </div>              
+            </div>
+            <div className="row d-md-flex justify-content-between align-items-center ">
+             <div className="col-12 col-md-4">
                 <select
                   value={selectedApprouve}
                   onChange={(e) => setSelectedApprouve(e.target.value)}
-                  className="form-select form-select mb-3"
+                  className="form-select form-select"
                 >
                   <option value="">Tous les Approbations </option>
                   <option value="oui">Oui</option>
                   <option value="non">Non</option>
                 </select>
               </div>
-            </div>
-            <div className="row d-md-flex justify-content-between align-items-center ">
-              <div className="col-12 col-md-10">
+              <div className="col-12 col-md-4">
                 <input
                   type="text"
                   className="form-control px-1 px-md-3"

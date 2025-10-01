@@ -37,7 +37,7 @@ export default function About() {
               </div>
 
               {/* Texte explicatif placé à droite en version desktop */}
-              <div className="col-md-6 text-md-end">
+              <div className="col-md-6 text-md-end ">
                 <motion.h2 {...fadeUp}>Qui sommes-nous ?</motion.h2>
                 <motion.p
                   {...fadeUp}

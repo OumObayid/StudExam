@@ -92,18 +92,30 @@ export default function StudentLayout() {
     try {
       // Chargement des filières
       const responseFilieres = await getAllFilieres();
-      if (responseFilieres.success) dispatch(setFilieres(responseFilieres.filieres));
-      else console.error(responseFilieres.message || "Erreur lors du chargement des filières");
+      if (responseFilieres.success)
+        dispatch(setFilieres(responseFilieres.filieres));
+      else
+        console.error(
+          responseFilieres.message || "Erreur lors du chargement des filières"
+        );
 
       // Chargement des niveaux
       const responseNiveaux = await getAllNiveaux();
-      if (responseNiveaux.success) dispatch(setNiveaux(responseNiveaux.niveaux));
-      else console.error(responseNiveaux.message || "Erreur lors du chargement des niveaux");
+      if (responseNiveaux.success)
+        dispatch(setNiveaux(responseNiveaux.niveaux));
+      else
+        console.error(
+          responseNiveaux.message || "Erreur lors du chargement des niveaux"
+        );
 
       // Chargement des modules
       const responseModules = await getAllModules();
-      if (responseModules.success) dispatch(setModules(responseModules.modules));
-      else console.error(responseModules.message || "Erreur lors du chargement des modules");
+      if (responseModules.success)
+        dispatch(setModules(responseModules.modules));
+      else
+        console.error(
+          responseModules.message || "Erreur lors du chargement des modules"
+        );
 
       // Chargement des utilisateurs
       await getAllUsers()
@@ -123,8 +135,13 @@ export default function StudentLayout() {
 
       // Chargement des passations
       const responsePassations = await getAllPassations();
-      if (responsePassations.success) dispatch(setPassations(responsePassations.passations));
-      else console.error(responsePassations.message || "Erreur lors du chargement des passations");
+      if (responsePassations.success)
+        dispatch(setPassations(responsePassations.passations));
+      else
+        console.error(
+          responsePassations.message ||
+            "Erreur lors du chargement des passations"
+        );
 
       // Notification succès
       MyAlert({
@@ -162,25 +179,48 @@ export default function StudentLayout() {
           {/* Menu du sidebar */}
           <ul className="nav flex-column">
             <li className="nav-item mb-2">
-              <NavLink onClick={closeSidebar} to="/instructor/dashboard" className="nav-link">
+              <NavLink
+                onClick={closeSidebar}
+                to="/instructor/dashboard"
+                className="nav-link"
+              >
                 Dashboard
               </NavLink>
             </li>
             <li className="nav-item mb-2">
-              <NavLink onClick={closeSidebar} to="/instructor/profil-instructor" className="nav-link">
+              <NavLink
+                onClick={closeSidebar}
+                to="/instructor/profil-instructor"
+                className="nav-link"
+              >
                 Profil
               </NavLink>
             </li>
             <li className="nav-item mb-2">
-              <NavLink onClick={closeSidebar} to="/instructor/gest-examens" className="nav-link">
+              <NavLink
+                onClick={closeSidebar}
+                to="/instructor/mes-classes"
+                className="nav-link"
+              >
+                Mes Classes
+              </NavLink>
+            </li>
+            <li className="nav-item mb-2">
+              <NavLink
+                onClick={closeSidebar}
+                to="/instructor/gest-examens"
+                className="nav-link"
+              >
                 Gestion des examens
               </NavLink>
             </li>
-
             {/* Bouton pour rafraîchir les données */}
             <li>
               <button
-                onClick={() => { closeSidebar(); handleRefresh(); }}
+                onClick={() => {
+                  closeSidebar();
+                  handleRefresh();
+                }}
                 className="nav-link btn btn-link text-start w-100"
                 style={{ textDecoration: "none" }}
               >
@@ -191,7 +231,10 @@ export default function StudentLayout() {
             {/* Bouton de déconnexion */}
             <li className="nav-item mb-2">
               <button
-                onClick={() => { closeSidebar(); handleLogout(); }}
+                onClick={() => {
+                  closeSidebar();
+                  handleLogout();
+                }}
                 className="text-start btn nav-link w-100"
               >
                 Deconnexion
@@ -229,4 +272,3 @@ export default function StudentLayout() {
     </div>
   );
 }
-

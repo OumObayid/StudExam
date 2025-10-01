@@ -73,8 +73,8 @@
 
 .inputbox .input-auth {
   background: transparent;
-  border: none;
-  outline: none;
+  border: none !important;
+  outline: none !important;
   font-size: 1em;
   padding: 0 35px 0 5px;
   /* color: var(--dore); */

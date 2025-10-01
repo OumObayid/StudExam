@@ -185,11 +185,20 @@ export default function Navbar({ toggleSidebar, sidebarOpen }) {
                           Profil
                         </Link>
                       </li>
+                       <li>
+                        <Link
+                          onClick={handleClose}
+                          className="dropdown-item"
+                          to="/instructor/mes-classes"
+                        >
+                          Mes classes
+                        </Link>
+                      </li>
                       <li>
                         <Link
                           onClick={handleClose}
                           className="dropdown-item"
-                          to="/instructor/aff-examens"
+                          to="/instructor/gest-examens"
                         >
                           Gestion des examens
                         </Link>

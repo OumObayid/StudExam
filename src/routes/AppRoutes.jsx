@@ -53,6 +53,7 @@ import MesResultats from "../pages/student/MesResultats";
 //page non trouvée ou non autorisé
 import NotFound from "../pages/public/notFound/NotFound";
 import Unauthorized from "../pages/public/Unauthorized";
+import MesClasses from "../pages/instructor/MesClasses";
 
 export default function AppRoutes() {
   return (
@@ -111,6 +112,7 @@ export default function AppRoutes() {
         <Route path="profil-instructor" element={<ProfilInstructor />} />
         <Route path="gest-examens" element={<GestionExamens />} />
         <Route path="creer-examen" element={<CreerExamen />} />
+        <Route path="mes-classes" element={<MesClasses />} />
         <Route path="mod-examen/:IdExamen" element={<ModifierExamen />} />
         <Route path="aff-examen/:idParams" element={<AffExamen />} />
 

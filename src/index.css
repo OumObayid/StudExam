@@ -1,64 +1,62 @@
 @font-face {
-  font-family: 'CychaCockie';
-  src: url('/fonts/CychaCockie.ttf');
+  font-family: "CychaCockie";
+  src: url("/fonts/CychaCockie.ttf");
   font-weight: normal;
   font-style: normal;
 }
 
-:root { 
---marron: #4c442f;
---marron-clear:#9b8e6d;
---marron-clear1:#b6a987;
---marron-clear2:#dbcdad;
---marron-fonce: #090403;
+:root {
+  --marron: #4c442f;
+  --marron-clear: #9b8e6d;
+  --marron-clear1: #b6a987;
+  --marron-clear2: #dbcdad;
+  --marron-fonce: #090403;
 
---dore:#cca43b;
---dore-clear :#d6c28f;
---dore-fonce:#ad9350;
+  --dore: #cca43b;
+  --dore-clear: #d6c28f;
+  --dore-fonce: #ad9350;
 
+  --gris: #b0b3b7ff;
+  --gris-clear: rgb(233, 234, 237);
+  --gris-fonce: #6c757d;
 
---gris:#b0b3b7ff;
---gris-clear:rgb(233, 234, 237);
---gris-fonce:#6c757d;
+  --danger: #d0404f;
+  --danger-clear: ##ff4745;
+  --danger-clair2: #f6b1b9;
 
---danger:#d0404f;
---danger-clear:##ff4745;
---danger-clair2:#f6b1b9;
-
- --turquois: #17c8f8;
+  --turquois: #17c8f8;
   --turquoisclear1: #84cde1;
 
---vert-olive:#aeb36a;
---vert-olive-fonce:#868b43;
-  --vert-olive-clear:#e5e9b1;
+  --vert-olive: #aeb36a;
+  --vert-olive-fonce: #868b43;
+  --vert-olive-clear: #e5e9b1;
 
-  --warning:#fff3cd;
-  --warning-fonce:#e4d08d;
+  --warning: #fff3cd;
+  --warning-fonce: #e4d08d;
 }
 
-
 /* gestion des liens */
-a{
-    text-decoration: none;
+a {
+  text-decoration: none;
 }
 
 /* gestion des formulaires */
 input:focus:not(.input-auth),
-select:focus, textarea:focus {
+select:focus,
+textarea:focus {
   border: 1px solid var(--dore) !important;
   outline: none !important;
   box-shadow: 0 0 0 0.1rem rgba(218, 165, 32, 0.5) !important; /* doré avec transparence */
 }
 
-select{
-   border: none !important;
+select {
+  border: none !important;
 }
 
 /* Option sélectionnée */
 select.form-select option:checked {
   background-color: var(--dore-fonce) !important;
   color: #fff !important;
- 
 }
 
 /* Hover sur une option (quand le menu est ouvert) */
@@ -67,18 +65,24 @@ select.decorated option:hover {
   color: #fff !important;
 }
 
-label{
+label {
   font-weight: bold;
 }
 
-table tr td{
-vertical-align: middle;
+table tr td {
+  vertical-align: middle;
 }
 
 /* Appliquer un fond gris clair et un texte légèrement atténué */
-input:disabled,select:disabled,.p-disaled {
-  background-color: #fff !important; 
-  color: var(--marron) !important;           
-  opacity: 1 !important;              
-  cursor: not-allowed !important;     
+input:disabled,
+select:disabled,
+.p-disaled {
+  background-color: #fff !important;
+  color: var(--marron) !important;
+  opacity: 1 !important;
+  cursor: not-allowed !important;
+}
+
+select:not(.select-auth) {
+  border: 1px solid #dee2e6 !important;
 }
