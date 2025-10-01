@@ -1,29 +1,35 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { setActiveUser, updateUserInfos } from "../../redux/authSlice";
 import { login } from "../../services/auth";
 import { getExamensByStudent } from "../../services/examens";
 import { setUserExamens } from "../../redux/examenSlice";
 import { getAllUsers } from "../../services/users";
 import { setUsers } from "../../redux/userSlice";
-import Card from "../../components/Card";
+import MyButton from "../../components/button/MyButton";
+import "./Auth.css"; // Assure-toi de mettre ton CSS ici
+import { MyAlert } from "../../components/myconfirm/MyAlert";
 
-export default function Login() {
+const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [cin, setCin] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!cin || !password) {
-      setMessage("Veuillez remplir tous les champs !");
+       MyAlert({
+              title: "Attention",
+              text: "Veuillez remplir tous les champs !",
+              icon: "warning",
+            });
       return;
     }
     try {
-      await login(cin, password)
+       console.log('password :', password);
+      await login(cin, password)     
         .then(async (response) => {
           if (response.success) {
             if (response.user.ApprouveM == "oui") {
@@ -57,11 +63,18 @@ export default function Login() {
                 navigate("/");
               }
             } else
-              setMessage(
-                "Votre inscription n'est pas encore approuvée par l'Admin"
-              );
+            
+            MyAlert({
+              title: "Patience",
+              text: "Votre inscription n'est pas encore approuvée par l'Admin",
+              icon: "warning",
+            });
           } else {
-            setMessage(response.message || "Erreur de connexion");
+             MyAlert({
+              title: "Erreur",
+              text: `${response.message} || "Erreur de connexion"`,
+              icon: "error",
+            });
           }
         })
         .catch((err) => {
@@ -74,46 +87,65 @@ export default function Login() {
         });
     } catch (error) {
       console.error("Login failed:", error);
-      setMessage(error.message);
+       MyAlert({
+              title: "Erreur",
+              text: error.message,
+              icon: "error",
+            });
     }
   };
-
   return (
-    <div className="mt-5">
-      <Card className="mb-4"
-        title="Connexion"
-  icon={<i className="bi bi-box-arrow-in-right fs-4 text-primary"></i>}
-        content={
-          <>
-            {message && <div className="alert alert-danger">{message}</div>}
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label className="form-label">CIN</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={cin}
-                  onChange={(e) => setCin(e.target.value)}
-                />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Mot de passe</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Login
-              </button>
-            </form>
-          </>
-        }
-        bgColor="#ece1be"
-      />
-      ;
-    </div>
+    <section className="section-auth px-2">
+      <div className="form-box-login">
+        <div className="form-value ">
+          <form onSubmit={handleSubmit} >
+            <h2 className="h2-auth">Connexion</h2>
+            <div className="inputbox">
+              <i className="icone-i bi bi-envelope"></i>
+              <input
+                value={cin}
+                onChange={(e) => setCin(e.target.value)}
+                className="input-auth"
+                type="text"
+                required
+              />
+              <label>Cin Identité</label>
+            </div>
+
+            <div className="inputbox">
+              <i className="icone-i bi bi-lock"></i>
+              <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input-auth"
+                type="password"
+                required
+              />
+              <label>Mot de passe</label>
+            </div>
+
+            <div className="forget text-center">
+              <a href="#">Mot de passe oublié?</a>
+            </div>
+
+            <MyButton
+              styleNm={{ color: "var(--dore-clear" }}
+              classNm="button-auth"
+              typeNm="submit"
+            >
+              Se connecter
+            </MyButton>
+
+            <div className="register">
+              <p>
+                Vous n'avez de compte? <Link to="/register">S'inscrire</Link>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
   );
-}
+};
+
+export default Login;

@@ -18,7 +18,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Erreur connexion DB"]);
     exit;
 }
-
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 // Récupération des données
 $data = json_decode(file_get_contents("php://input"), true);
 $IdNiveau = intval($data['IdNiveau'] ?? 0);
@@ -31,7 +31,7 @@ if (empty($NomNiveau) || $IdNiveau <= 0) {
 }
 
 // Vérifier si IdNiveau existe déjà
-$stmtCheck = $conn->prepare("SELECT COUNT(*) as count FROM Niveau WHERE IdNiveau = ?");
+$stmtCheck = $conn->prepare("SELECT COUNT(*) as count FROM niveau WHERE IdNiveau = ?");
 $stmtCheck->bind_param("i", $IdNiveau);
 $stmtCheck->execute();
 $result = $stmtCheck->get_result();
@@ -45,7 +45,7 @@ if ($row['count'] > 0) {
 }
 
 // Préparation de l'insertion
-$stmt = $conn->prepare("INSERT INTO Niveau (IdNiveau, NomNiveau) VALUES (?, ?)");
+$stmt = $conn->prepare("INSERT INTO niveau (IdNiveau, NomNiveau) VALUES (?, ?)");
 $stmt->bind_param("is", $IdNiveau, $NomNiveau);
 
 if ($stmt->execute()) {

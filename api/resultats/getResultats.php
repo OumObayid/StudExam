@@ -20,7 +20,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Erreur connexion DB"]);
     exit;
 }
-
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 // Récupération de tous les résultats
 $sql = "SELECT r.IdResultat, r.ScoreR, r.DateResultat,
                m.CinMembre, m.Nom, m.Prenom,

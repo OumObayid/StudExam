@@ -40,9 +40,9 @@ const CreerExamen = () => {
       // Appel API
       const response = await ajouterExamen(form);
       if (response.success) {
-        const examen = response.examen; // API renvoie l'examen inséré
-        console.log("examen :", examen);
-        dispatch(addExamen(examen));
+        const examen = response.examen; // API renvoie l'examen inséré       
+       const examenAdded = {...examen,questions:[]};
+        dispatch(addExamen(examenAdded));
          MyAlert({
             title: "Success",
             text: "Examen ajouté avec succès !",
@@ -65,7 +65,7 @@ const CreerExamen = () => {
          MyAlert({
             title: "Erreur",
             text: `${response.message || "Erreur lors de l'ajout de l'examen"}`,
-            icon: "erreur",
+            icon: "error",
           });
       }
     } catch (error) {
@@ -73,7 +73,7 @@ const CreerExamen = () => {
        MyAlert({
             title: "Erreur",
             text: "Impossible d'ajouter l'examen !",
-            icon: "erreur",
+            icon: "error",
           });
     }
   };

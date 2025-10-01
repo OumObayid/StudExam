@@ -59,7 +59,7 @@ const GestionAffectation = () => {
         MyAlert({
           title: "erreur",
           text: `${response.message || "Erreur d’affectation"}`,
-          icon: "erreur",
+          icon: "error",
         });
       }
     } catch (error) {
@@ -67,7 +67,7 @@ const GestionAffectation = () => {
       MyAlert({
         title: "Erreur",
         text: "Erreur serveur : " + error.message,
-        icon: "erreur",
+        icon: "error",
       });
     }
   };

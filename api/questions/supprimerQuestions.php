@@ -19,7 +19,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Erreur connexion DB"]);
     exit;
 }
-
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 // Récupérer les données JSON
 $data = json_decode(file_get_contents("php://input"), true);
 if (!isset($data['IdExamen']) || $data['IdExamen'] === "") {
@@ -31,7 +31,7 @@ if (!isset($data['IdExamen']) || $data['IdExamen'] === "") {
 $IdExamen = $data['IdExamen'];
 
 // Préparer la requête DELETE
-$stmt = $conn->prepare("DELETE FROM Question WHERE IdExamenQ = ?");
+$stmt = $conn->prepare("DELETE FROM question WHERE IdExamenQ = ?");
 if (!$stmt) {
     http_response_code(500);
     echo json_encode(["success" => false, "message" => "Erreur préparation requête"]);

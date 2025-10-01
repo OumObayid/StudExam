@@ -79,14 +79,14 @@ const GestionExamen = () => {
               text: `${
                 response.message || "Impossible de supprimer l'examen !"
               }`,
-              icon: "erreur",
+              icon: "error",
             });
           }
         } catch (error) {
           MyAlert({
             title: "Erreur",
             text: "Erreur lors de la suppression !",
-            icon: "erreur",
+            icon: "error",
           });
         }
       }
@@ -108,7 +108,7 @@ const GestionExamen = () => {
           text: `${
             response.message || "Impossible de mettre à jour l'approbation !"
           }`,
-          icon: "erreur",
+          icon: "error",
         });
       }
     } catch (error) {
@@ -116,7 +116,7 @@ const GestionExamen = () => {
       MyAlert({
         title: "Erreur",
         text: "Erreur lors de la mise à jour de l'approbation !",
-        icon: "erreur",
+        icon: "error",
       });
     }
   };
@@ -130,7 +130,7 @@ const GestionExamen = () => {
         MyAlert({
           title: "Erreur",
           text: `${response.message} || "Impossible de mettre à jour la publication !"`,
-          icon: "erreur",
+          icon: "error",
         });
       }
     } catch (error) {
@@ -138,7 +138,7 @@ const GestionExamen = () => {
       MyAlert({
         title: "Erreur",
         text: "Erreur lors de la mise à jour de publication !",
-        icon: "erreur",
+        icon: "error",
       });
     }
   };

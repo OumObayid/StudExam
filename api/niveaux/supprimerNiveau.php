@@ -18,7 +18,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Erreur connexion DB"]);
     exit;
 }
-
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 // Récupération des données JSON
 $data = json_decode(file_get_contents("php://input"), true);
 $IdNiveau = intval($data['IdNiveau'] ?? 0);
@@ -30,7 +30,7 @@ if ($IdNiveau <= 0) {
 }
 
 // Vérifier si le niveau existe
-$stmtCheck = $conn->prepare("SELECT COUNT(*) as count FROM Niveau WHERE IdNiveau = ?");
+$stmtCheck = $conn->prepare("SELECT COUNT(*) as count FROM niveau WHERE IdNiveau = ?");
 $stmtCheck->bind_param("i", $IdNiveau);
 $stmtCheck->execute();
 $result = $stmtCheck->get_result();
@@ -44,7 +44,7 @@ if ($row['count'] == 0) {
 }
 
 // Suppression du niveau
-$stmt = $conn->prepare("DELETE FROM Niveau WHERE IdNiveau = ?");
+$stmt = $conn->prepare("DELETE FROM niveau WHERE IdNiveau = ?");
 $stmt->bind_param("i", $IdNiveau);
 
 if ($stmt->execute()) {

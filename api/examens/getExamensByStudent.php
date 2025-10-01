@@ -16,7 +16,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Erreur connexion DB"]);
     exit;
 }
-
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 $data = json_decode(file_get_contents("php://input"), true);
 if (!$data || !isset($data['CinMembre'])) {
     http_response_code(400);
@@ -31,12 +31,12 @@ SELECT
     e.DateDebutE, e.DateFinE, e.PublieE, e.IdModule, 
     m.NomModule, m.DescriptionModule, 
     f.NomFiliere AS Filiere, n.NomNiveau AS Niveau
-FROM Examen e
-INNER JOIN Module m ON e.IdModule = m.IdModule
-INNER JOIN Filiere f ON m.IdFiliere = f.IdFiliere
-INNER JOIN Niveau n ON m.IdNiveau = n.IdNiveau
-WHERE m.IdFiliere = (SELECT IdFiliere FROM Membre WHERE CinMembre = ?)
-  AND m.IdNiveau = (SELECT IdNiveau FROM Membre WHERE CinMembre = ?)
+FROM examen e
+INNER JOIN module m ON e.IdModule = m.IdModule
+INNER JOIN filiere f ON m.IdFiliere = f.IdFiliere
+INNER JOIN niveau n ON m.IdNiveau = n.IdNiveau
+WHERE m.IdFiliere = (SELECT IdFiliere FROM membre WHERE CinMembre = ?)
+  AND m.IdNiveau = (SELECT IdNiveau FROM membre WHERE CinMembre = ?)
   AND e.PublieE = 'oui'
 ORDER BY e.DateDebutE DESC
 ";

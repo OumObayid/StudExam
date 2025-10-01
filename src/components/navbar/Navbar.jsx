@@ -1,10 +1,9 @@
-
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectIsLoggedIn,
   selectUserInfos,
-  removeActiveUser
+  removeActiveUser,
 } from "../../redux/authSlice";
 import "./Navbar.css";
 
@@ -15,45 +14,47 @@ export default function Navbar({ toggleSidebar, sidebarOpen }) {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const userInfos = useSelector(selectUserInfos); // contient { id, firstname, lastname, TypeMembre, ... }
 
-  // Fonction de déconnexion
+  // Fonction de déconnexion : supprime l'utilisateur actif du store et du localStorage
+  // puis ferme le menu et redirige vers la page de login après une courte transition
   const handleLogout = () => {
     dispatch(removeActiveUser());
     localStorage.removeItem("userinfos");
     handleClose();
-    // attendre la fin de la transition avant de naviguer
     setTimeout(() => {
       navigate("/login");
-    }, 300); // 300ms = durée de ta transition CSS
+    }, 300); // 300ms = durée de la transition CSS
   };
 
-  // Fonction pour fermer en transition le menu collapse lors d'un clic sur un menu
+  // Fonction pour fermer le menu collapse en mobile avec transition fluide
   const handleClose = () => {
     if (window.innerWidth < 768) {
       const nav = document.getElementById("navbarNav");
       if (nav) {
-        // Applique la hauteur à 0 avant de retirer show pour la transition
-        nav.style.height = nav.scrollHeight + "px"; // assure que la hauteur est connue
+        // Définir la hauteur actuelle avant de la réduire pour transition
+        nav.style.height = nav.scrollHeight + "px";
         requestAnimationFrame(() => {
-          nav.style.height = "0"; // transition vers 0
+          nav.style.height = "0"; // transition vers hauteur 0
         });
         setTimeout(() => {
           nav.classList.remove("show");
-          nav.style.height = ""; // reset
-        }, 300); // même durée que la transition CSS
+          nav.style.height = ""; // réinitialisation
+        }, 300); // durée de la transition CSS
       }
     }
   };
 
-  // pour afficher le bouton sidebar rien que pour les pages admin , instructeur ou student
-  // true seulement si la route contient /admin/, /student/ ou /instructor/
+  // Détermine si le bouton de sidebar doit s'afficher
+  // true seulement sur les routes /admin/, /student/ ou /instructor/
   const showSidebarButton =
     location.pathname.startsWith("/admin/") ||
     location.pathname.startsWith("/student/") ||
     location.pathname.startsWith("/instructor/");
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark shadow-sm py-2 px-3">
       <div className="container">
-        {/* Bouton hamburger sidebar */}
+
+        {/* Bouton hamburger pour ouvrir/fermer la sidebar sur mobile */}
         {showSidebarButton && (
           <button
             className="btn d-md-none  me-3 p-0"
@@ -64,21 +65,26 @@ export default function Navbar({ toggleSidebar, sidebarOpen }) {
               <i
                 className="bi-layout-sidebar-inset "
                 style={{ fontSize: "1.8rem", color: "#b0b3b7ff" }}
-              ></i> // icône croix
+              ></i> // icône pour fermer la sidebar
             ) : (
               <i
                 className="bi-layout-sidebar-inset-reverse "
                 style={{ fontSize: "1.8rem", color: "#b0b3b7ff" }}
-              ></i> // icône menu
+              ></i> // icône pour ouvrir la sidebar
             )}
           </button>
         )}
 
-        <Link onClick={handleClose} className="navbar-brand fw-bold" to="/">
+        {/* Logo / marque */}
+        <Link
+          onClick={handleClose}
+          className="nav-link logo navbar-brand fw-bold"
+          to="/"
+        >
           StudXam
         </Link>
 
-        {/* Bouton pour toggler le navbar sur mobile */}
+        {/* Bouton pour toggler le menu navbar en mobile */}
         <button
           className="navbar-toggler border-0 shadow-none"
           type="button"
@@ -93,17 +99,20 @@ export default function Navbar({ toggleSidebar, sidebarOpen }) {
 
         <div className="collapse navbar-collapse " id="navbarNav">
           <ul className="navbar-nav ms-auto pb-4 pb-md-0">
+
+            {/* Liens publics */}
+            <li className="nav-item">
+              <Link onClick={handleClose} className="nav-link" to="/about">
+                A propos
+              </Link>
+            </li>
             <li className="nav-item">
               <Link onClick={handleClose} className="nav-link" to="/contact">
                 Contact
               </Link>
             </li>
-            <li className="nav-item">
-              <Link onClick={handleClose} className="nav-link" to="#">
-                A propos
-              </Link>
-            </li>
-            {/* Menu public */}
+
+            {/* Menu public uniquement si non connecté */}
             {!isLoggedIn && (
               <>
                 <li className="nav-item">
@@ -123,7 +132,7 @@ export default function Navbar({ toggleSidebar, sidebarOpen }) {
               </>
             )}
 
-            {/* Utilisateur connecté */}
+            {/* Menu utilisateur connecté */}
             {isLoggedIn && userInfos && (
               <li className="nav-item dropdown">
                 <span
@@ -134,13 +143,14 @@ export default function Navbar({ toggleSidebar, sidebarOpen }) {
                   aria-expanded="false"
                   style={{ cursor: "pointer" }}
                 >
-                  {userInfos.Prenom}
+                  {userInfos.Prenom} {/* Affiche prénom de l'utilisateur */}
                 </span>
                 <ul
                   className="dropdown-menu dropdown-menu-end"
                   aria-labelledby="navbarDropdown"
                 >
-                  {/* Menu spécifique selon TypeMembre */}
+
+                  {/* Sous-menu spécifique selon TypeMembre */}
                   {userInfos.TypeMembre === "Admin" && (
                     <>
                       <li>
@@ -151,55 +161,10 @@ export default function Navbar({ toggleSidebar, sidebarOpen }) {
                         >
                           Dashboard
                         </Link>
-                      </li>
-
-                                           <li>
-                        <Link
-                          to="/admin/gest-site"
-                          onClick={handleClose}
-                          className="dropdown-item"
-                        >
-                          Gestion du site
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/admin/gest-instructor"
-                          onClick={handleClose}
-                          className="dropdown-item"
-                        >
-                          Gestion des instructeurs
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/admin/gest-student"
-                          onClick={handleClose}
-                          className="dropdown-item"
-                        >
-                          Gestion des étudiants
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/admin/gest-examen"
-                          onClick={handleClose}
-                          className="dropdown-item"
-                        >
-                          Gestion des examens
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/admin/mes-resultats"
-                          onClick={handleClose}
-                          className="dropdown-item"
-                        >
-                          Statistiques
-                        </Link>
-                      </li>
+                      </li>  
                     </>
                   )}
+
                   {userInfos.TypeMembre === "Instructor" && (
                     <>
                       <li>
@@ -228,9 +193,10 @@ export default function Navbar({ toggleSidebar, sidebarOpen }) {
                         >
                           Gestion des examens
                         </Link>
-                      </li>                     
+                      </li>
                     </>
                   )}
+
                   {userInfos.TypeMembre === "Student" && (
                     <>
                       <li>
@@ -257,7 +223,7 @@ export default function Navbar({ toggleSidebar, sidebarOpen }) {
                           className="dropdown-item"
                           to="/student/mes-examens"
                         >
-                          Mes Examens
+                          Mes Examens à passer
                         </Link>
                       </li>
                       <li>
@@ -266,12 +232,13 @@ export default function Navbar({ toggleSidebar, sidebarOpen }) {
                           className="dropdown-item"
                           to="/student/mes-resultats"
                         >
-                          Statistiques
+                          Mes résultats
                         </Link>
                       </li>
                     </>
                   )}
 
+                  {/* Séparateur et bouton Déconnexion */}
                   <li>
                     <hr className="mb-2 w-75 mx-auto" />
                   </li>
@@ -284,6 +251,7 @@ export default function Navbar({ toggleSidebar, sidebarOpen }) {
                       Déconnexion
                     </span>
                   </li>
+
                 </ul>
               </li>
             )}

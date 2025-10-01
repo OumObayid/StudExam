@@ -18,7 +18,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Erreur connexion DB"]);
     exit;
 }
-
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 // Récupération des données JSON
 $data = json_decode(file_get_contents("php://input"), true);
 $IdFiliere = trim($data['IdFiliere'] ?? '');
@@ -31,7 +31,7 @@ if (empty($IdFiliere) || empty($NomFiliere)) {
 }
 
 // Vérifier que l'IdFiliere n'existe pas déjà
-$stmtCheck = $conn->prepare("SELECT COUNT(*) as count FROM Filiere WHERE IdFiliere = ?");
+$stmtCheck = $conn->prepare("SELECT COUNT(*) as count FROM filiere WHERE IdFiliere = ?");
 $stmtCheck->bind_param("s", $IdFiliere);
 $stmtCheck->execute();
 $result = $stmtCheck->get_result();
@@ -45,7 +45,7 @@ if ($row['count'] > 0) {
 }
 
 // Insérer la nouvelle filière
-$stmt = $conn->prepare("INSERT INTO Filiere (IdFiliere, NomFiliere) VALUES (?, ?)");
+$stmt = $conn->prepare("INSERT INTO filiere (IdFiliere, NomFiliere) VALUES (?, ?)");
 $stmt->bind_param("ss", $IdFiliere, $NomFiliere);
 
 if ($stmt->execute()) {

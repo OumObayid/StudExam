@@ -18,7 +18,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Erreur connexion DB"]);
     exit;
 }
-
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 try {
     // ⚡ Nouvelle requête avec jointures
     $sql = "
@@ -28,9 +28,9 @@ try {
             M.IdNiveau, N.NomNiveau, 
             M.IdFiliere, F.NomFiliere, 
             M.ApprouveM
-        FROM Membre M
-        LEFT JOIN Niveau N ON M.IdNiveau = N.IdNiveau
-        LEFT JOIN Filiere F ON M.IdFiliere = F.IdFiliere
+        FROM membre M
+        LEFT JOIN niveau N ON M.IdNiveau = N.IdNiveau
+        LEFT JOIN filiere F ON M.IdFiliere = F.IdFiliere
     ";
 
     $stmt = $conn->prepare($sql);

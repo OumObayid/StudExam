@@ -1,21 +1,27 @@
-
 // ---------tous les droits sont réservés à Oumaima El Obayid-----------//
-// ceci est un bouton personnalisé
+// Composant React qui définit un bouton personnalisé réutilisable
 
 import React from "react";
 import "./MyButton.css"
 
-export default function Button  (props) {
-  const classNm=props.classNm;
-  const styleNm=props.styleNm;
-  const typeNm=props.typeNm;
-  const titleNm=props.titleNm;
-  const onClick=props.onClick
+export default function Button(props) {
+  // Extraction des props reçues pour configurer le bouton
+  const classNm = props.classNm;   // classes CSS personnalisées
+  const styleNm = props.styleNm;   // styles inline passés en objet
+  const typeNm = props.typeNm;     // type du bouton (submit, button, reset)
+  const titleNm = props.titleNm;   // texte d’infobulle au survol
+  const onClick = props.onClick;   // fonction à exécuter au clic
+
   return (
-    <button className={`btnn ${classNm}`} style={styleNm} type={typeNm} title={titleNm} onClick={onClick}>
+    // Bouton avec les propriétés dynamiques et le contenu enfant
+    <button
+      className={`btnn ${classNm}`}
+      style={styleNm}
+      type={typeNm}
+      title={titleNm}
+      onClick={onClick}
+    >
       {props.children}
     </button>
   );
 };
-
-

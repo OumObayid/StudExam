@@ -5,11 +5,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeActiveUser, selectUserInfos } from "../redux/authSlice";
 import Footer from "../components/footer/Footer";
 export default function StudentLayout() {
+  // État local pour savoir si le sidebar est ouvert ou fermé
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Récupère les informations de l'utilisateur depuis Redux (ex: prénom, type, etc.)
   const user = useSelector(selectUserInfos);
+
+  // Hook React Router pour naviguer vers une autre route
   const navigate = useNavigate();
+
+  // Hook Redux pour dispatcher des actions
   const dispatch = useDispatch();
-  // setExamNumber envoyé au child DashboardStudent pour recuperer examNumber
+
+  // État pour stocker le nombre d'examens à passer, passé au Dashboard via Outlet
   const [examNumber, setExamNumber] = useState(0);
 
   // Fonction de déconnexion de l'utilisateur
@@ -20,17 +28,17 @@ export default function StudentLayout() {
     // Supprime les informations utilisateur stockées localement
     localStorage.removeItem("userinfos");
 
-    // Appelle la fonction handleClose pour fermer le menu collapse (si ouvert)
+    // Ferme le menu collapse si ouvert (utile pour mobile)
     handleClose();
 
     // On attend la fin de la transition CSS avant de naviguer vers la page login
-    // Ici 300ms correspond à la durée de la transition définie pour le sidebar/collapse
+    // 300ms = durée de la transition CSS du sidebar/collapse
     setTimeout(() => {
       navigate("/login");
     }, 300);
   };
 
-  // Fonction pour toggler (ouvrir/fermer) le sidebar
+  // Fonction pour ouvrir/fermer le sidebar
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -38,57 +46,69 @@ export default function StudentLayout() {
   // Fonction pour fermer le sidebar automatiquement sur mobile
   const closeSidebar = () => {
     if (window.innerWidth < 768) {
-      // Vérifie si l'écran est en mode mobile
-      setSidebarOpen(false); // Ferme le sidebar uniquement pour mobile
+      setSidebarOpen(false); // ferme le sidebar uniquement si l'écran < 768px
     }
   };
 
-  // Fonction pour fermer en transition le menu collapse lors d'un clic sur un menu
+  // Fonction pour fermer le menu collapse avec une transition
   const handleClose = () => {
     if (window.innerWidth < 768) {
       const nav = document.getElementById("navbarNav");
       if (nav) {
-        // Applique la hauteur à 0 avant de retirer show pour la transition
-        nav.style.height = nav.scrollHeight + "px"; // assure que la hauteur est connue
+        // Fixe la hauteur initiale pour que la transition fonctionne
+        nav.style.height = nav.scrollHeight + "px";
+
+        // Animation frame pour déclencher la transition vers 0
         requestAnimationFrame(() => {
-          nav.style.height = "0"; // transition vers 0
+          nav.style.height = "0";
         });
+
+        // Après 300ms, retire la classe 'show' et reset la hauteur
         setTimeout(() => {
           nav.classList.remove("show");
-          nav.style.height = ""; // reset
-        }, 300); // même durée que la transition CSS
+          nav.style.height = "";
+        }, 300);
       }
     }
   };
 
   return (
     <div className="d-flex flex-column min-vh-100">
+      {/* Navbar en haut, reçoit les props pour gérer le sidebar */}
       <Navbar toggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
+
       <div className="d-flex flex-grow-1">
-        {/* Sidebar */}
+        {/* Sidebar fixe à gauche */}
         <aside
-          className="layout   py-3 position-fixed h-100"
+          className="layout py-3 position-fixed h-100"
           style={{
-            width: "250px",
-            transition: "all 0.3s ease",
+            width: "250px", // largeur fixe du sidebar
+            transition: "all 0.3s ease", // transition pour ouverture/fermeture
+            // Position à gauche : 0 pour desktop ou si ouvert sur mobile, sinon -260px
             left: window.innerWidth >= 768 ? "0" : sidebarOpen ? "0" : "-260px",
-            zIndex: 999,
+            zIndex: 999, // au-dessus du contenu principal
           }}
         >
+          {/* Titre du sidebar avec prénom de l'étudiant */}
           <h4 style={{ marginTop: "7px" }} className="text-center">
             Etudiant: <span className="fs-5">{user.Prenom}</span>
           </h4>
           <hr style={{ marginTop: "14px" }} />
+
+          {/* Menu vertical */}
           <ul className="nav flex-column">
+            {/* Dashboard */}
             <li className="nav-item mb-2">
               <NavLink
-                onClick={closeSidebar}
+                onClick={closeSidebar} // ferme sidebar sur mobile après clic
                 to="/student/dashboard"
                 className="nav-link"
               >
                 Dashboard
               </NavLink>
             </li>
+
+            {/* Profil étudiant */}
             <li className="nav-item mb-2">
               <NavLink
                 onClick={closeSidebar}
@@ -98,20 +118,23 @@ export default function StudentLayout() {
                 Mon Profil
               </NavLink>
             </li>
-            <li className="nav-item mb-2 ">
+
+            {/* Examens à passer avec badge pour le nombre */}
+            <li className="nav-item mb-2">
               <NavLink
                 onClick={closeSidebar}
                 to="/student/mes-examens"
                 className="nav-link d-flex justify-content-between align-items-center"
               >
                 Mes Examens à passer
-                 {examNumber > 0 && (
-                <span className="exam-badge">{examNumber}</span>
-              )}
-              </NavLink>             
+                {/* Badge affiché uniquement si examNumber > 0 */}
+                {examNumber > 0 && (
+                  <span className="exam-badge">{examNumber}</span>
+                )}
+              </NavLink>
             </li>
-         
 
+            {/* Résultats */}
             <li className="nav-item mb-2">
               <NavLink
                 onClick={closeSidebar}
@@ -121,13 +144,15 @@ export default function StudentLayout() {
                 Mes Résultats
               </NavLink>
             </li>
+
+            {/* Bouton de déconnexion */}
             <li className="nav-item mb-2">
               <button
                 onClick={() => {
-                  closeSidebar();
-                  handleLogout();
+                  closeSidebar(); // ferme le sidebar si mobile
+                  handleLogout(); // déconnecte l'utilisateur
                 }}
-                className="text-start  btn nav-link w-100"
+                className="text-start btn nav-link w-100"
               >
                 Deconnexion
               </button>
@@ -135,28 +160,33 @@ export default function StudentLayout() {
           </ul>
         </aside>
 
-        {/* Overlay pour mobile quand sidebar ouverte */}
+        {/* Overlay sombre sur mobile lorsque le sidebar est ouvert */}
         {sidebarOpen && (
           <div
-            className="position-fixed  top-0 start-0 w-100 h-100 bg-dark bg-opacity-25 d-md-none"
-            onClick={toggleSidebar}
+            className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-25 d-md-none"
+            onClick={toggleSidebar} // clic sur l'overlay ferme le sidebar
             style={{ zIndex: 998 }}
           />
         )}
 
-        {/* Main content */}
+        {/* Contenu principal */}
         <main
-          className=" main-outlet flex-grow-1 px-3 px-md-4"
+          className="main-outlet flex-grow-1 px-3 px-md-4"
           style={{
-            marginLeft: window.innerWidth >= 768 ? "250px" : "0", // décale le contenu seulement sur desktop
+            // Décale le contenu à droite du sidebar seulement sur desktop
+            marginLeft: window.innerWidth >= 768 ? "250px" : "0",
             transition: "margin-left 0.3s ease",
             minWidth: 0,
           }}
         >
-          <Outlet context={{ setExamNumber }}  />
+          {/* Outlet pour afficher les routes enfants avec passage du setter examNumber */}
+          <Outlet context={{ setExamNumber }} />
         </main>
       </div>
+
+      {/* Footer en bas */}
       <Footer />
     </div>
   );
 }
+

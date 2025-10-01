@@ -1,0 +1,159 @@
+ .home {
+    min-height: calc(
+      100vh - 52px - 72px
+    ); /* hauteur totale - navbar - footer */
+    background-image: url(/images/bg.jpg);
+    background-size:cover;
+    background-position: right; /* centrée */
+    background-repeat: no-repeat; /* pas de répétition */
+  }
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    max-width: 80%;
+    min-height: calc(100vh - 95px);
+  }
+  .hero-left h2{
+    color:var(--vert-olive-fonce);
+    margin-bottom:40px !important;
+   
+  }
+   .hero-left button{
+    margin-top: 30px;
+   }
+
+@media (min-width: 768px) {
+  .home {
+    min-height: calc(
+      100vh - 52px - 72px
+    ); /* hauteur totale - navbar - footer */
+    background-image: url(/images/hero.jpg);
+    background-size: auto;
+    background-position: right; /* centrée */
+    background-repeat: no-repeat; /* pas de répétition */
+    margin-top: 52px;
+  }
+  .home-contain{
+    width: 60%;
+  }
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    max-width: 50%;
+    min-height: calc(100vh - 52px - 72px);
+  }
+    .hero-left h2{
+    color:var(--vert-olive);
+    margin-bottom:0;
+    padding-top: 20px;
+   
+  }
+}
+
+/* About.css */
+
+/* Police et reset */
+.about-page * {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+.about-page h2 {
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--dore); /* couleur principale StudExam */
+}
+
+.about-page p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* Sections */
+.about-page section {
+  padding: 60px 0;
+}
+
+.about-page .bg-light {
+  background-color: #f8f9fa !important;
+}
+
+/* Images */
+.about-page img {
+  max-height: 250px;
+  max-width: 400px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* Cartes Comment ça marche */
+.about-page .card {
+  max-height: 250px;
+  max-width: 400px;
+  border: none;
+  border-radius: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-page .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.about-page .card-title {
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.about-page .card-text {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* Avantages icônes */
+.about-page .bi {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.about-page .section-advantages h5 {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.about-page .section-advantages p {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* Section extra */
+.about-page .section-extra p {
+  max-width: 700px;
+  margin: 0 auto;
+  font-size: 1.05rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .about-page .hero-left,
+  .about-page .col-md-6,
+  .about-page .col-md-4 {
+    text-align: center;
+  }
+
+  .about-page .row.flex-md-row-reverse {
+    flex-direction: column !important;
+  }
+
+  .about-page .section-advantages .bi {
+    font-size: 2.5rem;
+  }
+}

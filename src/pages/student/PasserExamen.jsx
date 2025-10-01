@@ -48,7 +48,7 @@ export default function PasserExamen() {
           MyAlert({
             title: "Erreur",
             text: `${response.message || "Impossible d’ouvrir la passation"}`,
-            icon: "erreur",
+            icon: "error",
           });
           setPassationOk(false);
         }
@@ -57,7 +57,7 @@ export default function PasserExamen() {
          MyAlert({
             title: "Erreur",
             text:"Erreur lors de l’ouverture de la passation",
-            icon: "erreur",
+            icon: "error",
           });
       } finally {
         setLoading(false);
@@ -132,7 +132,7 @@ export default function PasserExamen() {
          MyAlert({
             title: "Erreur",
             text: `${response.message || "Erreur lors de la soumission."}`,
-            icon: "erreur",
+            icon: "error",
           });
       }
     } catch (error) {

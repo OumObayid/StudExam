@@ -16,7 +16,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Erreur connexion DB"]);
     exit;
 }
-
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 $data = json_decode(file_get_contents("php://input"), true);
 
 if (!isset($data['CinMembre']) || !isset($data['IdModule'])) {

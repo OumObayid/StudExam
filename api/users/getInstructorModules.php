@@ -23,7 +23,7 @@ if ($conn->connect_error) {
     ]);
     exit;
 }
-
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 // Requête pour récupérer toutes les liaisons
 $sql = "SELECT CinInstructor, IdModule FROM instructor_module";
 $result = $conn->query($sql);

@@ -18,7 +18,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Erreur connexion DB"]);
     exit;
 }
-
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 $data = json_decode(file_get_contents("php://input"), true);
 
 if (!isset($data['CinMembre'])) {
@@ -30,7 +30,7 @@ $cin = $data['CinMembre'];
 
 try {
     // Préparer la requête DELETE
-    $stmt = $conn->prepare("DELETE FROM Membre WHERE CinMembre = ?");
+    $stmt = $conn->prepare("DELETE FROM membre WHERE CinMembre = ?");
     if (!$stmt) {
         throw new Exception("Erreur préparation requête : " . $conn->error);
     }

@@ -18,6 +18,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Erreur connexion DB"]);
     exit;
 }
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 
 // Requête pour récupérer les passations avec infos membre, examen et résultat
 $sql = "

@@ -18,7 +18,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Erreur connexion DB"]);
     exit;
 }
-
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 $data = json_decode(file_get_contents("php://input"), true);
 
 // Vérification des champs obligatoires
@@ -57,7 +57,7 @@ if ($type === "Student") {
 }
 
 // Vérifier si le CIN existe déjà
-$checkSql = "SELECT CinMembre FROM Membre WHERE CinMembre = ?";
+$checkSql = "SELECT CinMembre FROM membre WHERE CinMembre = ?";
 $checkStmt = $conn->prepare($checkSql);
 $checkStmt->bind_param("s", $cin);
 $checkStmt->execute();
@@ -73,7 +73,7 @@ if ($checkStmt->num_rows > 0) {
 $checkStmt->close();
 
 // Préparer l'insertion
-$sql = "INSERT INTO Membre 
+$sql = "INSERT INTO membre 
         (CinMembre, Password, Nom, Prenom, DateNaissance, Adresse, Email, Tel, TypeMembre, IdNiveau, IdFiliere, ApprouveM) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'non')";
 

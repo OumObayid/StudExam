@@ -16,7 +16,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Erreur connexion DB"]);
     exit;
 }
-
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 $data = json_decode(file_get_contents("php://input"), true);
 
 // Vérification directe des champs obligatoires
@@ -36,7 +36,7 @@ $dateNaissance = strtotime($data['DateNaissance']) !== false
 
 // Préparer la requête UPDATE
 $stmt = $conn->prepare("
-    UPDATE Membre SET
+    UPDATE membre SET
         Nom = ?, Prenom = ?, DateNaissance = ?, Adresse = ?,
         Email = ?, Tel = ?, IdNiveau = ?, IdFiliere = ?
     WHERE CinMembre = ?
@@ -68,7 +68,7 @@ $stmt->bind_param(
 if ($stmt->execute()) {
     $stmt->close();
 
-    $stmt2 = $conn->prepare("SELECT * FROM Membre WHERE CinMembre = ?");
+    $stmt2 = $conn->prepare("SELECT * FROM membre WHERE CinMembre = ?");
     $stmt2->bind_param("s", $data['CinMembre']);
     $stmt2->execute();
     $result = $stmt2->get_result();

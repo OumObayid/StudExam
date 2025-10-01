@@ -18,7 +18,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Erreur connexion DB"]);
     exit;
 }
-
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 // Récupération des données JSON
 $data = json_decode(file_get_contents("php://input"), true);
 $IdFiliere = trim($data['IdFiliere'] ?? '');
@@ -33,7 +33,7 @@ if (empty($IdFiliere) || $IdNiveau <= 0 || empty($NomModule)) {
 }
 
 // Vérifier que la filière existe
-$stmtF = $conn->prepare("SELECT COUNT(*) as count FROM Filiere WHERE IdFiliere = ?");
+$stmtF = $conn->prepare("SELECT COUNT(*) as count FROM filiere WHERE IdFiliere = ?");
 $stmtF->bind_param("s", $IdFiliere);
 $stmtF->execute();
 $resultF = $stmtF->get_result();
@@ -47,7 +47,7 @@ if ($rowF['count'] == 0) {
 }
 
 // Vérifier que le niveau existe
-$stmtN = $conn->prepare("SELECT COUNT(*) as count FROM Niveau WHERE IdNiveau = ?");
+$stmtN = $conn->prepare("SELECT COUNT(*) as count FROM niveau WHERE IdNiveau = ?");
 $stmtN->bind_param("i", $IdNiveau);
 $stmtN->execute();
 $resultN = $stmtN->get_result();
@@ -61,15 +61,15 @@ if ($rowN['count'] == 0) {
 }
 
 // Préparer l'insertion
-$stmt = $conn->prepare("INSERT INTO Module (NomModule, DescriptionModule, IdFiliere, IdNiveau) VALUES (?, ?, ?, ?)");
+$stmt = $conn->prepare("INSERT INTO module (NomModule, DescriptionModule, IdFiliere, IdNiveau) VALUES (?, ?, ?, ?)");
 $stmt->bind_param("sssi", $NomModule, $DescriptionModule, $IdFiliere, $IdNiveau);
 
 if ($stmt->execute()) {
-    $idModule = $stmt->insert_id;
+    $IdModule = $stmt->insert_id;
     echo json_encode([
         "success" => true,
         "module" => [
-            "IdModule" => $idModule,
+            "IdModule" => $IdModule,
             "NomModule" => $NomModule,
             "DescriptionModule" => $DescriptionModule,
             "IdFiliere" => $IdFiliere,

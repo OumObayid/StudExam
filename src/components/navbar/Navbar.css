@@ -1,20 +1,30 @@
 .navbar {
   position: fixed !important;
-  z-index: 1050 !important; 
-  top:0;
+  z-index: 1050 !important;
+  top: 0;
   width: 100%;
-  background-color: var(--marron-fonce) !important;
+
+  /* Dégradé cylindrique : sombre -> clair -> sombre */
+  background: linear-gradient(to bottom,
+    #000 0%,        /* sombre haut */
+    #48453c 40%,       /* brillance milieu */
+    #48453c 60%,       /* brillance milieu */
+    #000 100%       /* sombre bas */
+  );
+
+  /* Ombre pour détacher de la page */
+
+
 }
+
+
 .navbar .nav-link, .navbar-toggler .navbar-toggler-icon {
   color: var(--gris) !important;
 }
 .navbar .nav-link:hover,.navbar .navbar-brand:hover,.navbar-toggler:hover {
   color: var(--dore) !important;
 }
-.navbar .navbar-brand {
-  color:var(--dore);
-  font-weight: bold;
-}
+
 
 
 .navbar-collapse {
@@ -22,8 +32,13 @@
 }
    
 #navbarNav {
-  transition: height 0.3s ease, opacity 0.3s ease;
-  
+  transition: height 0.3s ease, opacity 0.3s ease;  
 }
 
 
+/* logo */
+.navbar .logo{
+ font-family: 'CychaCockie', cursive;
+  font-size: 24px;
+  color:var(--dore-fonce) !important;
+}

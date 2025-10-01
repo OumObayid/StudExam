@@ -18,6 +18,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Erreur connexion DB"]);
     exit;
 }
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 
 $data = json_decode(file_get_contents("php://input"), true);
 
@@ -32,7 +33,7 @@ $pwd = $data['Password'];
 
 // Requête pour récupérer l'utilisateur
 $stmt = $conn->prepare("SELECT CinMembre, Password, Nom, Prenom, DateNaissance, Adresse, Email, Tel, TypeMembre, IdNiveau, IdFiliere, ApprouveM
-                        FROM Membre
+                        FROM membre
                         WHERE CinMembre = ?");
 $stmt->bind_param("s", $cin);
 $stmt->execute();

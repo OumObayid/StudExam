@@ -19,19 +19,26 @@ import { setPassations } from "../redux/passationSlice";
 import { MyAlert } from "../components/myconfirm/MyAlert";
 
 export default function StudentLayout() {
+  // État pour savoir si le sidebar est ouvert ou fermé
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Récupération des informations de l'utilisateur depuis le store Redux
   const user = useSelector(selectUserInfos);
 
+  // Hook pour naviguer entre les pages
   const navigate = useNavigate();
+
+  // Hook pour dispatcher des actions Redux
   const dispatch = useDispatch();
 
+  // Calcul dynamique de la position du sidebar selon la taille de l'écran et son état
   let sidebarLeft;
   if (window.innerWidth >= 768) {
-    sidebarLeft = "0";
+    sidebarLeft = "0"; // Sidebar fixe à gauche sur desktop
   } else if (sidebarOpen) {
-    sidebarLeft = "0";
+    sidebarLeft = "0"; // Sidebar visible sur mobile si ouvert
   } else {
-    sidebarLeft = "-260px";
+    sidebarLeft = "-260px"; // Sidebar caché sur mobile
   }
 
   // Fonction de déconnexion de l'utilisateur
@@ -42,180 +49,150 @@ export default function StudentLayout() {
     // Supprime les informations utilisateur stockées localement
     localStorage.removeItem("userinfos");
 
-    // Appelle la fonction handleClose pour fermer le menu collapse (si ouvert)
+    // Ferme le menu collapse si ouvert (mobile)
     handleClose();
 
-    // On attend la fin de la transition CSS avant de naviguer vers la page login
-    // Ici 300ms correspond à la durée de la transition définie pour le sidebar/collapse
+    // Attend la fin de la transition CSS avant de naviguer vers la page login
     setTimeout(() => {
       navigate("/login");
-    }, 300);
+    }, 300); // 300ms = durée de la transition
   };
 
-  // Fonction pour toggler (ouvrir/fermer) le sidebar
+  // Fonction pour toggler l'ouverture/fermeture du sidebar
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  // Fonction pour fermer le sidebar automatiquement sur mobile
+  // Ferme automatiquement le sidebar sur mobile
   const closeSidebar = () => {
     if (window.innerWidth < 768) {
-      // Vérifie si l'écran est en mode mobile
-      setSidebarOpen(false); // Ferme le sidebar uniquement pour mobile
+      setSidebarOpen(false);
     }
   };
 
-  // Fonction pour fermer en transition le menu collapse lors d'un clic sur un menu
+  // Ferme le menu collapse du navbar avec une transition sur mobile
   const handleClose = () => {
     if (window.innerWidth < 768) {
       const nav = document.getElementById("navbarNav");
       if (nav) {
-        // Applique la hauteur à 0 avant de retirer show pour la transition
-        nav.style.height = nav.scrollHeight + "px"; // assure que la hauteur est connue
+        nav.style.height = nav.scrollHeight + "px"; // fixe la hauteur actuelle
         requestAnimationFrame(() => {
           nav.style.height = "0"; // transition vers 0
         });
         setTimeout(() => {
-          nav.classList.remove("show");
-          nav.style.height = ""; // reset
+          nav.classList.remove("show"); // supprime la classe Bootstrap "show"
+          nav.style.height = ""; // reset de la hauteur
         }, 300); // même durée que la transition CSS
       }
     }
   };
 
-  // Fonction pour rafraichir les données instructors, students, examens,..
+  // Fonction pour rafraîchir toutes les données liées à l'utilisateur et aux examens
   const handleRefresh = async () => {
     try {
-      // filières
+      // Chargement des filières
       const responseFilieres = await getAllFilieres();
-      if (responseFilieres.success) {
-        dispatch(setFilieres(responseFilieres.filieres));
-      } else {
-        console.error(
-          responseFilieres.message || "Erreur lors du chargement des filières"
-        );
-      }
-      //niveau
+      if (responseFilieres.success) dispatch(setFilieres(responseFilieres.filieres));
+      else console.error(responseFilieres.message || "Erreur lors du chargement des filières");
+
+      // Chargement des niveaux
       const responseNiveaux = await getAllNiveaux();
-      if (responseNiveaux.success) {
-        dispatch(setNiveaux(responseNiveaux.niveaux));
-      } else {
-        console.error(
-          responseNiveaux.message || "Erreur lors du chargement des niveaux"
-        );
-      }
-      //modules
+      if (responseNiveaux.success) dispatch(setNiveaux(responseNiveaux.niveaux));
+      else console.error(responseNiveaux.message || "Erreur lors du chargement des niveaux");
+
+      // Chargement des modules
       const responseModules = await getAllModules();
-      if (responseModules.success) {
-        dispatch(setModules(responseModules.modules));
-      } else {
-        console.error(
-          responseModules.message || "Erreur lors du chargement des niveaux"
-        );
-      }
-      //users
+      if (responseModules.success) dispatch(setModules(responseModules.modules));
+      else console.error(responseModules.message || "Erreur lors du chargement des modules");
+
+      // Chargement des utilisateurs
       await getAllUsers()
         .then(async (response) => {
-          if (response.success) {
-            dispatch(setUsers(response.users));
-          } else console.log(response.message);
+          if (response.success) dispatch(setUsers(response.users));
+          else console.log(response.message);
         })
         .catch((err) => console.log(err));
 
-      //examens
+      // Chargement des examens
       await getAllExamens()
         .then((response) => {
-          if (response.success) {
-            dispatch(setExamens(response.examens));
-          } else console.log(response.message);
+          if (response.success) dispatch(setExamens(response.examens));
+          else console.log(response.message);
         })
         .catch((err) => console.log(err));
 
-      //passation
+      // Chargement des passations
       const responsePassations = await getAllPassations();
-      if (responsePassations.success) {
-        dispatch(setPassations(responsePassations.passations));
-      } else {
-        console.error(
-          responsePassations.message || "Erreur lors du chargement des niveaux"
-        );
-      }
-       MyAlert({
+      if (responsePassations.success) dispatch(setPassations(responsePassations.passations));
+      else console.error(responsePassations.message || "Erreur lors du chargement des passations");
+
+      // Notification succès
+      MyAlert({
         title: "success",
         text: "Les données utilisateurs et examens sont mises à jour ",
         icon: "success",
-      })
+      });
     } catch (err) {
       console.error("Erreur lors du chargement des données :", err);
     }
   };
 
   return (
-    <div className=" d-flex flex-column min-vh-100">
+    <div className="d-flex flex-column min-vh-100">
+      {/* Navbar principale */}
       <Navbar toggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
+
       <div className="d-flex flex-grow-1">
         {/* Sidebar */}
         <aside
-          className="layout   py-3 position-fixed h-100"
+          className="layout py-3 position-fixed h-100"
           style={{
             width: "250px",
             transition: "all 0.3s ease",
             left: sidebarLeft,
             zIndex: 999,
           }}
-        >         
-          <h4 style={{marginTop:"7px"}} className="text-center">
+        >
+          {/* Affichage du nom de l'instructeur */}
+          <h4 style={{ marginTop: "7px" }} className="text-center">
             Instructeur: <span className="fs-5">{user.Prenom}</span>
           </h4>
-          <hr style={{marginTop:"14px"}}/>
+          <hr style={{ marginTop: "14px" }} />
+
+          {/* Menu du sidebar */}
           <ul className="nav flex-column">
             <li className="nav-item mb-2">
-              <NavLink
-                onClick={closeSidebar}
-                to="/instructor/dashboard"
-                className="nav-link"
-              >
+              <NavLink onClick={closeSidebar} to="/instructor/dashboard" className="nav-link">
                 Dashboard
               </NavLink>
             </li>
             <li className="nav-item mb-2">
-              <NavLink
-                onClick={closeSidebar}
-                to="/instructor/profil-instructor"
-                className="nav-link"
-              >
+              <NavLink onClick={closeSidebar} to="/instructor/profil-instructor" className="nav-link">
                 Profil
               </NavLink>
             </li>
             <li className="nav-item mb-2">
-              <NavLink
-                onClick={closeSidebar}
-                to="/instructor/gest-examens"
-                className="nav-link"
-              >
+              <NavLink onClick={closeSidebar} to="/instructor/gest-examens" className="nav-link">
                 Gestion des examens
               </NavLink>
             </li>
 
+            {/* Bouton pour rafraîchir les données */}
             <li>
               <button
-                onClick={() => {
-                  closeSidebar();
-                  handleRefresh();
-                }}
+                onClick={() => { closeSidebar(); handleRefresh(); }}
                 className="nav-link btn btn-link text-start w-100"
                 style={{ textDecoration: "none" }}
               >
                 Rafraîchir les données
               </button>
             </li>
+
+            {/* Bouton de déconnexion */}
             <li className="nav-item mb-2">
               <button
-                onClick={() => {
-                  closeSidebar();
-                  handleLogout();
-                }}
-                className="text-start  btn nav-link w-100"
+                onClick={() => { closeSidebar(); handleLogout(); }}
+                className="text-start btn nav-link w-100"
               >
                 Deconnexion
               </button>
@@ -223,7 +200,7 @@ export default function StudentLayout() {
           </ul>
         </aside>
 
-        {/* Overlay pour mobile quand sidebar ouverte */}
+        {/* Overlay pour mobile quand le sidebar est ouvert */}
         {sidebarOpen && (
           <button
             type="button"
@@ -231,14 +208,14 @@ export default function StudentLayout() {
             onClick={toggleSidebar}
             style={{ zIndex: 998 }}
             aria-label="Close sidebar"
-          ></button>
+          />
         )}
 
-        {/* Main content */}
+        {/* Contenu principal */}
         <main
-          className=" main-outlet flex-grow-1 px-3 px-md-4"
+          className="main-outlet flex-grow-1 px-3 px-md-4"
           style={{
-            marginLeft: window.innerWidth >= 768 ? "250px" : "0", // décale le contenu seulement sur desktop
+            marginLeft: window.innerWidth >= 768 ? "250px" : "0", // décale le contenu sur desktop
             transition: "margin-left 0.3s ease",
             minWidth: 0,
           }}
@@ -246,7 +223,10 @@ export default function StudentLayout() {
           <Outlet />
         </main>
       </div>
+
+      {/* Footer */}
       <Footer />
     </div>
   );
 }
+

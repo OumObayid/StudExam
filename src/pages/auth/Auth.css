@@ -1,0 +1,187 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "poppins", sans-serif;
+}
+
+.section-auth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+
+
+.form-box-login,
+.form-box-register,.form-box-contact {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+}
+.form-box-login {
+  width: 400px;
+  height: 450px;
+}
+.form-box-contact{
+    width: 500px;
+  height: 500px;
+}
+.h2-auth {
+  color: var(--dore) !important;
+  text-align: center;
+  font-size: 2em;
+}
+
+.inputbox {
+  position: relative;
+  border-bottom: 2px solid var(--dore);
+  padding-bottom: 3px;
+  margin: 30px 0;
+  width: 100% !important;
+}
+.form-value{
+  width: 80%;
+}
+@media (min-width: 768) {
+  .inputbox {
+    width: 45% !important;
+  }
+}
+.inputbox label {
+  transform: translateY(-50%);
+  color: var(--dore);
+  font-size: 1em;
+  pointer-events: none;
+  transition: 0.5s;
+  position: absolute;
+  top: 50%;
+  left: 5px;
+}
+
+.input-auth:focus ~ label,
+.input-auth:valid ~ label {
+  top: -10px;
+}
+
+.inputbox .input-auth {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  padding: 0 35px 0 5px;
+  /* color: var(--dore); */
+  color: #f6ecc7;
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+}
+
+.inputbox .icone-i {
+  font-size: 1.2em;
+  position: absolute;
+  right: 8px;
+  color: var(--dore);
+  top: 5px;
+}
+.icone-textarea{
+  top: 50px !important;
+}
+
+.label-textarea{
+top: 75% !important;
+}
+
+
+textarea:focus ~ .label-textarea,
+textarea:valid ~ .label-textarea {
+  top: -15px !important;
+}
+.select-auth{
+  background-color: var(--dore-fonce) !important;
+}
+
+.forget {
+  color: var(--dore);
+  margin: -15px 0 15px;
+  font-size: 0.9em;
+}
+
+.forget label {
+  color: var(--dore);
+}
+
+.forget label .input-auth {
+  margin-right: 3px;
+}
+
+.forget label a,
+.forget a {
+  color: var(--dore);
+  text-decoration: none;
+}
+
+.forget label a:hover {
+  text-decoration: underline;
+}
+
+.button-auth {
+  width: 100%;
+  height: 40px;
+  border-radius: 40px;
+  background: var(--dore);
+  color:var(--marron) !important;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+}
+.button-auth:hover {
+  color:var(--marron) !important;
+}
+.register {
+  font-size: 0.9em;
+  color: var(--dore);
+  text-align: center;
+  margin: 25px 0 10px;
+}
+
+.register p a {
+  text-decoration: none;
+  color: var(--dore);
+  font-weight: 600;
+}
+
+.register p a:hover {
+  text-decoration: underline;
+}
+
+/* cacher le placeholder système du date input */
+.inputbox input[type="date"]::-webkit-datetime-edit {
+  color: transparent;
+}
+
+.inputbox input[type="date"]:focus::-webkit-datetime-edit,
+.inputbox input[type="date"]:valid::-webkit-datetime-edit {
+  color: inherit; /* réaffiche le texte de la valeur choisie */
+}
+
+.inputbox textarea {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  padding: 5px 35px 5px 5px;
+  color: var(--dore);
+  width: 100%;
+  min-height: 80px;
+  resize: none;
+}

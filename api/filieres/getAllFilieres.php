@@ -18,7 +18,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Erreur connexion DB"]);
     exit;
 }
-
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 $sql = "SELECT IdFiliere, NomFiliere FROM filiere ORDER BY NomFiliere ASC";
 $result = $conn->query($sql);
 

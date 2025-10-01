@@ -1,5 +1,43 @@
-.footer{
-background-color: var(--marron-fonce);
-color: var(--gris) !important;
-z-index: 1080;
+.footer {
+  background: linear-gradient(to bottom,
+    #000 0%,        /* sombre haut */
+    #48453c 40%,       /* brillance milieu */
+    #48453c 60%,       /* brillance milieu */
+    #000 100%       /* sombre bas */
+  );  color: var(--gris-fonce) !important;
+  z-index: 1000;
+}
+
+.footer h6 {
+  color: var(--dore);
+  margin-bottom: 15px;
+}
+
+.footer-link,.footer p {
+  color: var(--gris);
+  font-size: 14px;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 8px;
+  transition: color 0.3s;
+}
+
+.footer-link:hover {
+  color: var(--dore);
+}
+
+.footer-social {
+  color: var(--gris);
+  font-size: 1.2rem;
+  transition: color 0.3s;
+}
+
+.footer-social:hover {
+  color: var(--dore);
+}
+
+@media (max-width: 768px) {
+  .footer h5 {
+    text-align: center;
+  }
 }

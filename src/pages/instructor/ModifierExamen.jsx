@@ -73,7 +73,7 @@ const ModifierExamen = () => {
          MyAlert({
             title: "Erreur",
             text: `${response.message || "Erreur lors de la modification"}`,
-            icon: "erreur",
+            icon: "error",
           });
       }
     } catch (error) {
@@ -81,7 +81,7 @@ const ModifierExamen = () => {
       MyAlert({
             title: "Erreur",
             text:"Impossible de modifier l'examen !",
-            icon: "erreur",
+            icon: "error",
           });
     }
   };

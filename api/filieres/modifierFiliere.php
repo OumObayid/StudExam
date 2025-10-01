@@ -18,7 +18,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Erreur connexion DB"]);
     exit;
 }
-
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 // Récupération des données JSON
 $data = json_decode(file_get_contents("php://input"), true);
 $IdFiliere = trim($data['IdFiliere'] ?? '');
@@ -31,7 +31,7 @@ if (empty($IdFiliere) || empty($NomFiliere)) {
 }
 
 // Vérifier que la filière existe
-$stmtCheck = $conn->prepare("SELECT COUNT(*) as count FROM Filiere WHERE IdFiliere = ?");
+$stmtCheck = $conn->prepare("SELECT COUNT(*) as count FROM filiere WHERE IdFiliere = ?");
 $stmtCheck->bind_param("s", $IdFiliere);
 $stmtCheck->execute();
 $result = $stmtCheck->get_result();
@@ -45,7 +45,7 @@ if ($row['count'] == 0) {
 }
 
 // Mise à jour
-$stmt = $conn->prepare("UPDATE Filiere SET NomFiliere = ? WHERE IdFiliere = ?");
+$stmt = $conn->prepare("UPDATE filiere SET NomFiliere = ? WHERE IdFiliere = ?");
 $stmt->bind_param("ss", $NomFiliere, $IdFiliere);
 
 if ($stmt->execute()) {

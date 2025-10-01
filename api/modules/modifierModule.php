@@ -18,7 +18,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Erreur connexion DB"]);
     exit;
 }
-
+$conn->set_charset("utf8mb4"); // 🔑 Forcer l'encodage MySQL
 // Récupération des données JSON
 $data = json_decode(file_get_contents("php://input"), true);
 $IdModule = intval($data['IdModule'] ?? 0);
@@ -34,7 +34,7 @@ if ($IdModule <= 0 || empty($IdFiliere) || $IdNiveau <= 0 || empty($NomModule)) 
 }
 
 // Vérifier que le module existe
-$stmtCheck = $conn->prepare("SELECT COUNT(*) as count FROM Module WHERE IdModule = ?");
+$stmtCheck = $conn->prepare("SELECT COUNT(*) as count FROM module WHERE IdModule = ?");
 $stmtCheck->bind_param("i", $IdModule);
 $stmtCheck->execute();
 $result = $stmtCheck->get_result();
@@ -48,7 +48,7 @@ if ($row['count'] == 0) {
 }
 
 // Mise à jour
-$stmt = $conn->prepare("UPDATE Module SET NomModule = ?, DescriptionModule = ?, IdFiliere = ?, IdNiveau = ? WHERE IdModule = ?");
+$stmt = $conn->prepare("UPDATE module SET NomModule = ?, DescriptionModule = ?, IdFiliere = ?, IdNiveau = ? WHERE IdModule = ?");
 $stmt->bind_param("sssii", $NomModule, $DescriptionModule, $IdFiliere, $IdNiveau, $IdModule);
 
 if ($stmt->execute()) {

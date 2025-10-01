@@ -77,14 +77,14 @@ const ModifierQuestions = () => {
          MyAlert({
             title: "Erreur",
             text:"Questions modifiées avec succès !",
-            icon: "erreur",
+            icon: "error",
           });
         navigate(`/instructor/aff-examen/${IdExamen}`);
       } else {
          MyAlert({
             title: "Erreur",
             text: `${response.message || "Impossible de modifier les questions."}`,
-            icon: "erreur",
+            icon: "error",
           });
         
       }
@@ -93,7 +93,7 @@ const ModifierQuestions = () => {
         MyAlert({
             title: "Erreur",
             text:"Erreur lors de la modification des questions.",
-            icon: "erreur",
+            icon: "error",
           });
     }
   };

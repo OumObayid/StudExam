@@ -1,9 +1,16 @@
+@font-face {
+  font-family: 'CychaCockie';
+  src: url('/fonts/CychaCockie.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root { 
 --marron: #4c442f;
 --marron-clear:#9b8e6d;
 --marron-clear1:#b6a987;
 --marron-clear2:#dbcdad;
---marron-fonce: #2c2c2c;
+--marron-fonce: #090403;
 
 --dore:#cca43b;
 --dore-clear :#d6c28f;
@@ -15,12 +22,14 @@
 --gris-fonce:#6c757d;
 
 --danger:#d0404f;
---danger-clair:#f6b1b9;
+--danger-clear:##ff4745;
+--danger-clair2:#f6b1b9;
 
  --turquois: #17c8f8;
   --turquoisclear1: #84cde1;
 
 --vert-olive:#aeb36a;
+--vert-olive-fonce:#868b43;
   --vert-olive-clear:#e5e9b1;
 
   --warning:#fff3cd;
@@ -34,24 +43,27 @@ a{
 }
 
 /* gestion des formulaires */
-input:focus,
+input:focus:not(.input-auth),
 select:focus, textarea:focus {
   border: 1px solid var(--dore) !important;
   outline: none !important;
   box-shadow: 0 0 0 0.1rem rgba(218, 165, 32, 0.5) !important; /* doré avec transparence */
 }
 
-
+select{
+   border: none !important;
+}
 
 /* Option sélectionnée */
 select.form-select option:checked {
-  background-color: var(--dore) !important;
+  background-color: var(--dore-fonce) !important;
   color: #fff !important;
+ 
 }
 
 /* Hover sur une option (quand le menu est ouvert) */
 select.decorated option:hover {
-  background-color: var(--dore) !important;
+  background-color: var(--dore-fonce) !important;
   color: #fff !important;
 }
 

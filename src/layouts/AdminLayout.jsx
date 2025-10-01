@@ -21,49 +21,41 @@ import { setPassations } from "../redux/passationSlice";
 import { MyAlert } from "../components/myconfirm/MyAlert";
 
 export default function StudentLayout() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const user = useSelector(selectUserInfos);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // État pour le sidebar (ouvert/fermé)
+  const user = useSelector(selectUserInfos); // Récupère les infos de l'utilisateur connecté
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // Fonction de déconnexion de l'utilisateur
   const handleLogout = () => {
-    // Supprime l'utilisateur actif du store Redux
-    dispatch(removeActiveUser());
+    dispatch(removeActiveUser()); // Supprime l'utilisateur du store Redux
+    localStorage.removeItem("userinfos"); // Supprime les infos locales
+    handleClose(); // Ferme le menu collapse si nécessaire
 
-    // Supprime les informations utilisateur stockées localement
-    localStorage.removeItem("userinfos");
-
-    // Appelle la fonction handleClose pour fermer le menu collapse (si ouvert)
-    handleClose();
-
-    // On attend la fin de la transition CSS avant de naviguer vers la page login
-    // Ici 300ms correspond à la durée de la transition définie pour le sidebar/collapse
+    // Attente de la fin de la transition CSS avant de naviguer vers login
     setTimeout(() => {
       navigate("/login");
     }, 300);
   };
 
-  // Fonction pour toggler (ouvrir/fermer) le sidebar
+  // Fonction pour toggler l'état ouvert/fermé du sidebar
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  // Fonction pour fermer le sidebar automatiquement sur mobile
+  // Ferme automatiquement le sidebar sur mobile
   const closeSidebar = () => {
     if (window.innerWidth < 768) {
-      // Vérifie si l'écran est en mode mobile
-      setSidebarOpen(false); // Ferme le sidebar uniquement pour mobile
+      setSidebarOpen(false);
     }
   };
 
-  // Fonction pour fermer en transition le menu collapse lors d'un clic sur un menu
+  // Ferme le menu collapse de façon animée sur mobile
   const handleClose = () => {
     if (window.innerWidth < 768) {
       const nav = document.getElementById("navbarNav");
       if (nav) {
-        // Applique la hauteur à 0 avant de retirer show pour la transition
         nav.style.height = nav.scrollHeight + "px"; // assure que la hauteur est connue
         requestAnimationFrame(() => {
           nav.style.height = "0"; // transition vers 0
@@ -71,83 +63,68 @@ export default function StudentLayout() {
         setTimeout(() => {
           nav.classList.remove("show");
           nav.style.height = ""; // reset
-        }, 300); // même durée que la transition CSS
+        }, 300);
       }
     }
   };
 
-  // Fonction pour rafraichir les données instructors, students, examens,..
+  // Rafraîchit toutes les données importantes (filières, niveaux, modules, users, examens, passations)
   const handleRefresh = async () => {
     try {
-      // filières
+      // Récupération et dispatch des filières
       const responseFilieres = await getAllFilieres();
-      if (responseFilieres.success) {
-        dispatch(setFilieres(responseFilieres.filieres));
-      } else {
-        console.error(
-          responseFilieres.message || "Erreur lors du chargement des filières"
-        );
-      }
-      //niveau
+      if (responseFilieres.success) dispatch(setFilieres(responseFilieres.filieres));
+      else console.error(responseFilieres.message);
+
+      // Récupération et dispatch des niveaux
       const responseNiveaux = await getAllNiveaux();
-      if (responseNiveaux.success) {
-        dispatch(setNiveaux(responseNiveaux.niveaux));
-      } else {
-        console.error(
-          responseNiveaux.message || "Erreur lors du chargement des niveaux"
-        );
-      }
-      //modules
+      if (responseNiveaux.success) dispatch(setNiveaux(responseNiveaux.niveaux));
+      else console.error(responseNiveaux.message);
+
+      // Récupération et dispatch des modules
       const responseModules = await getAllModules();
-      if (responseModules.success) {
-        dispatch(setModules(responseModules.modules));
-      } else {
-        console.error(
-          responseModules.message || "Erreur lors du chargement des niveaux"
-        );
-      }
-      //users
+      if (responseModules.success) dispatch(setModules(responseModules.modules));
+      else console.error(responseModules.message);
+
+      // Récupération et dispatch des utilisateurs
       await getAllUsers()
-        .then(async (response) => {
-          if (response.success) {
-            dispatch(setUsers(response.users));
-          } else console.log(response.message);
+        .then((response) => {
+          if (response.success) dispatch(setUsers(response.users));
+          else console.log(response.message);
         })
         .catch((err) => console.log(err));
 
-      //examens
+      // Récupération et dispatch des examens
       await getAllExamens()
         .then((response) => {
-          if (response.success) {
-            dispatch(setExamens(response.examens));
-          } else console.log(response.message);
+          if (response.success) dispatch(setExamens(response.examens));
+          else console.log(response.message);
         })
         .catch((err) => console.log(err));
 
-      //passation
+      // Récupération et dispatch des passations
       const responsePassations = await getAllPassations();
-      if (responsePassations.success) {
-        dispatch(setPassations(responsePassations.passations));
-      } else {
-        console.error(
-          responsePassations.message || "Erreur lors du chargement des niveaux"
-        );
-      }
+      if (responsePassations.success) dispatch(setPassations(responsePassations.passations));
+      else console.error(responsePassations.message);
 
+      // Alerte succès
       MyAlert({
         title: "success",
         text: "Les données utilisateurs et examens sont mises à jour ",
         icon: "success",
-      })
+      });
     } catch (err) {
       console.error("Erreur lors du chargement des données :", err);
     }
   };
+
   return (
     <div className="d-flex flex-column min-vh-100">
+      {/* Navbar principale avec gestion du sidebar */}
       <Navbar toggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
+
       <div className="d-flex flex-grow-1">
-        {/* Sidebar */}
+        {/* Sidebar fixe */}
         <aside
           className="layout py-3 position-fixed h-100"
           style={{
@@ -157,24 +134,21 @@ export default function StudentLayout() {
             zIndex: 999,
           }}
         >
+          {/* Affichage du nom de l'utilisateur */}
           <h4 style={{ marginTop: "7px" }} className="text-center">
             Admin: <span className="fs-5">{user.Prenom}</span>
           </h4>
           <hr style={{ marginTop: "14px" }} />
 
           <div className="accordion" id="sidebarAccordion">
-            {/* Dashboard */}
+            {/* Lien vers Dashboard */}
             <div className="accordion-item border-0">
-              <NavLink
-                onClick={closeSidebar}
-                to="/admin/dashboard"
-                className="nav-link"
-              >
+              <NavLink onClick={closeSidebar} to="/admin/dashboard" className="nav-link">
                 Dashboard
               </NavLink>
             </div>
 
-            {/* Organisation Académique */}
+            {/* Organisation académique avec sous-menus */}
             <div className="accordion-item border-0">
               <h2 className="accordion-header" id="headingProgrammes">
                 <button
@@ -195,32 +169,20 @@ export default function StudentLayout() {
                 data-bs-parent="#sidebarAccordion"
               >
                 <div className="accordion-body p-0">
-                  <NavLink
-                    onClick={closeSidebar}
-                    to="/admin/gest-filiere"
-                    className="nav-link ps-4"
-                  >
+                  <NavLink onClick={closeSidebar} to="/admin/gest-filiere" className="nav-link ps-4">
                     Gestion des Filières
                   </NavLink>
-                  <NavLink
-                    onClick={closeSidebar}
-                    to="/admin/gest-niveau"
-                    className="nav-link ps-4"
-                  >
+                  <NavLink onClick={closeSidebar} to="/admin/gest-niveau" className="nav-link ps-4">
                     Gestion des Niveaux
                   </NavLink>
-                  <NavLink
-                    onClick={closeSidebar}
-                    to="/admin/gest-module"
-                    className="nav-link ps-4"
-                  >
+                  <NavLink onClick={closeSidebar} to="/admin/gest-module" className="nav-link ps-4">
                     Gestion des Modules
                   </NavLink>
                 </div>
               </div>
             </div>
 
-            {/* Utilisateurs */}
+            {/* Gestion des utilisateurs */}
             <div className="accordion-item border-0">
               <h2 className="accordion-header" id="headingUsers">
                 <button
@@ -241,34 +203,24 @@ export default function StudentLayout() {
                 data-bs-parent="#sidebarAccordion"
               >
                 <div className="accordion-body p-0">
-                  <NavLink
-                    onClick={closeSidebar}
-                    to="/admin/gest-instructor"
-                    className="nav-link ps-4"
-                  >
+                  <NavLink onClick={closeSidebar} to="/admin/gest-instructor" className="nav-link ps-4">
                     Gestion des Instructeurs
                   </NavLink>
-                  <NavLink
-                    onClick={closeSidebar}
-                    to="/admin/gest-student"
-                    className="nav-link ps-4"
-                  >
+                  <NavLink onClick={closeSidebar} to="/admin/gest-student" className="nav-link ps-4">
                     Gestion des Étudiants
                   </NavLink>
                 </div>
               </div>
             </div>
+
+            {/* Gestion des affectations */}
             <div className="accordion-item border-0">
-              <NavLink
-                onClick={closeSidebar}
-                to="/admin/gest-affect"
-                className="nav-link"
-              >
+              <NavLink onClick={closeSidebar} to="/admin/gest-affect" className="nav-link">
                 Gestion des affectations
               </NavLink>
             </div>
 
-            {/* Examens */}
+            {/* Gestion des examens et notes */}
             <div className="accordion-item border-0">
               <h2 className="accordion-header" id="headingExamens">
                 <button
@@ -289,25 +241,17 @@ export default function StudentLayout() {
                 data-bs-parent="#sidebarAccordion"
               >
                 <div className="accordion-body p-0">
-                  <NavLink
-                    onClick={closeSidebar}
-                    to="/admin/gest-examen"
-                    className="nav-link ps-4"
-                  >
+                  <NavLink onClick={closeSidebar} to="/admin/gest-examen" className="nav-link ps-4">
                     Gestion des Examens
                   </NavLink>
-                  <NavLink
-                    onClick={closeSidebar}
-                    to="/admin/gest-note"
-                    className="nav-link ps-4"
-                  >
+                  <NavLink onClick={closeSidebar} to="/admin/gest-note" className="nav-link ps-4">
                     Gestion des Notes
                   </NavLink>
                 </div>
               </div>
             </div>
 
-            {/* Rafraîchir */}
+            {/* Bouton pour rafraîchir les données */}
             <div className="accordion-item border-0">
               <button
                 onClick={() => {
@@ -321,7 +265,7 @@ export default function StudentLayout() {
               </button>
             </div>
 
-            {/* Déconnexion */}
+            {/* Bouton déconnexion */}
             <div className="accordion-item border-0">
               <button
                 onClick={() => {
@@ -336,28 +280,31 @@ export default function StudentLayout() {
           </div>
         </aside>
 
-        {/* Overlay pour mobile quand sidebar ouverte */}
+        {/* Overlay pour mobile quand le sidebar est ouvert */}
         {sidebarOpen && (
           <div
-            className="position-fixed  top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-md-none"
+            className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-md-none"
             onClick={toggleSidebar}
             style={{ zIndex: 998 }}
           />
         )}
 
-        {/* Main content */}
+        {/* Contenu principal de la page */}
         <main
-          className=" main-outlet flex-grow-1 px-3 px-md-4"
+          className="main-outlet flex-grow-1 px-3 px-md-4"
           style={{
-            marginLeft: window.innerWidth >= 768 ? "250px" : "0", // décale le contenu seulement sur desktop
+            marginLeft: window.innerWidth >= 768 ? "250px" : "0", // décale le contenu sur desktop
             transition: "margin-left 0.3s ease",
             minWidth: 0,
           }}
         >
-          <Outlet />
+          <Outlet /> {/* Composant pour afficher les routes enfants */}
         </main>
       </div>
+
+      {/* Footer général */}
       <Footer />
     </div>
   );
 }
+

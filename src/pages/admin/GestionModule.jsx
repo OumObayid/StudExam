@@ -59,6 +59,8 @@ const GestionModule = () => {
     }
     ajouterModule(idFiliere, idNiveau, nomModule, descriptionModule)
       .then((response) => {
+      console.log('response :', response);
+     
         dispatch(addModule(response.module));
         // reset form
         setNomModule("");
@@ -67,10 +69,10 @@ const GestionModule = () => {
         setIdNiveau("");
          MyAlert({
             title: "Success",
-            text: "Votre module a été bien ajouté qvec success !",
+            text: "Votre module a été bien ajouté avec success!",
             icon: "success",
           });
-
+   console.log(modules)
       })
       .catch((error) => console.error("Erreur lors de l'ajout :", error));
   };

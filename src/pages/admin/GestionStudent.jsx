@@ -69,7 +69,7 @@ export default function GestionStudent() {
             MyAlert({
               title: "Erreur",
               text: `${response.message || "Erreur lors de la suppression"}`,
-              icon: "erreur",
+              icon: "error",
             });
           }
         } catch (error) {
@@ -77,7 +77,7 @@ export default function GestionStudent() {
           MyAlert({
             title: "erreur",
             text: "Impossible de supprimer l'utilisateur !",
-            icon: "erreur",
+            icon: "error",
           });
         }
       }

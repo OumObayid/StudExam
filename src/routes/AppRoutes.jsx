@@ -13,6 +13,8 @@ import Home from "../pages/public/Home";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Contact from "../pages/public/Contact";
+import About from "../pages/public/About";
+
 // Admin pages
 import DashboardAdmin from "../pages/admin/DashboardAdmin";
 import GestionExamen from "../pages/admin/GestionExamen";
@@ -26,6 +28,8 @@ import GestionModule from "../pages/admin/GestionModule";
 import ModifierNiveau from "../pages/admin/ModifierNiveau";
 import ModifierFiliere from "../pages/admin/ModifierFiliere";
 import ModifierModule from "../pages/admin/ModifierModule";
+import AfficherStudent from "../pages/admin/AfficherStudent";
+
 // Instructor pages
 import DashboardInstructor from "../pages/instructor/DashboardInstructor";
 import ProfilInstructor from "../pages/instructor/ProfilInstructor";
@@ -44,26 +48,24 @@ import ProfilStudent from "../pages/student/ProfilStudent";
 import MesExamens from "../pages/student/MesExamens";
 import PasserExamen from "../pages/student/PasserExamen";
 import ProtectedRoute from "./ProtectedRoute";
-import Unauthorized from "../pages/Unauthorized";
-
-//page non trouvée
-import NotFound from "../pages/public/notFound/NotFound";
-import AfficherStudent from "../pages/admin/AfficherStudent";
 import MesResultats from "../pages/student/MesResultats";
 
-
+//page non trouvée ou non autorisé
+import NotFound from "../pages/public/notFound/NotFound";
+import Unauthorized from "../pages/public/Unauthorized";
 
 export default function AppRoutes() {
   return (
     <Routes>
       {/* Pages publiques */}
       <Route element={<PublicLayout />}>
-        <Route index element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
       </Route>
+      <Route path="" element={<Home />} />
+      <Route path="/about" element={<About />} />
 
       {/* Pages Admin */}
       <Route

@@ -69,7 +69,7 @@ const CreerQuestions = () => {
           MyAlert({
             title: "Erreur",
             text: `${response.message || "Impossible d'ajouter les questions."}`,
-            icon: "erreur",
+            icon: "error",
           });
       }
     } catch (error) {
@@ -77,7 +77,7 @@ const CreerQuestions = () => {
        MyAlert({
         title: "Erreur",
         text: "Erreur lors de l'ajout des questions.",
-        icon: "erreur",
+        icon: "error",
       });
     }
   };

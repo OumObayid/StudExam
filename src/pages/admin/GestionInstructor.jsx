@@ -48,7 +48,7 @@ export default function GestionInstructor() {
       MyAlert({
         title: "Erreur",
         text: "Impossible de mettre à jour l'approbation !",
-        icon: "erreur",
+        icon: "error",
       });
     }
   };
@@ -65,7 +65,7 @@ export default function GestionInstructor() {
             MyAlert({
               title: "Erreur",
               text: `${response.message} || "Impossible de supprimer l'utilisateur !"`,
-              icon: "erreur",
+              icon: "error",
             });
           }
         } catch (error) {
@@ -73,7 +73,7 @@ export default function GestionInstructor() {
           MyAlert({
             title: "Erreur",
             text: "Erreur lors de la suppression !",
-            icon: "erreur",
+            icon: "error",
           });
         }
       }

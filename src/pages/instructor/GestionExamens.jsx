@@ -11,7 +11,7 @@ import { selectNiveaux } from "../../redux/niveauSlice";
 import { selectModules } from "../../redux/moduleSlice";
 import { supprimerExamen } from "../../services/examens";
 import MyButton from "../../components/button/MyButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PageTitle from "../../components/PageTitle";
 import Card from "../../components/Card";
 import { MyConfirm } from "../../components/myconfirm/MyConfirm";
@@ -24,7 +24,8 @@ export default function GestionExamens() {
   const myexamens = examens.filter(
     (e) => e.CreeParCinMembre === userInfos.CinMembre
   );
-
+useEffect(()=>{
+})
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const filieres = useSelector(selectFilieres);
@@ -68,7 +69,7 @@ export default function GestionExamens() {
               text: `${
                 response.message || "Impossible de supprimer l'examen !"
               }`,
-              icon: "erreur",
+              icon: "error",
             });
           }
         } catch (error) {
@@ -76,7 +77,7 @@ export default function GestionExamens() {
           MyAlert({
             title: "Erreur",
             text: "Erreur lors de la suppression !",
-            icon: "erreur",
+            icon: "error",
           });
         }
       }
@@ -97,7 +98,7 @@ export default function GestionExamens() {
               text: `${
                 response.message || "Impossible de supprimer l'examen !"
               }`,
-              icon: "erreur",
+              icon: "error",
             });
           }
         } catch (error) {
@@ -105,7 +106,7 @@ export default function GestionExamens() {
            MyAlert({
             title: "Erreur",
             text: "Erreur lors de la suppression !",
-            icon: "erreur",
+            icon: "error",
           });
         }
       }

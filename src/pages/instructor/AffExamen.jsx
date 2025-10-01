@@ -113,14 +113,14 @@ const AffExamen = () => {
                       ? "Masquer les questions"
                       : "Afficher les questions"}
                   </MyButton>
-                  <MyButton
+                 {examen.ApprouveE=="non" && <MyButton
                     className="btn-info"
                     onClick={() => {
                       navigate(`/instructor/mod-questions/${examen.IdExamen}`);
                     }}
                   >
                     Modifier les questions
-                  </MyButton>
+                  </MyButton>}
                 </>
               ) : (
                 <MyButton

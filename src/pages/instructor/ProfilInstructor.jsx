@@ -61,9 +61,9 @@ const ProfilStudent = () => {
         dispatch(updateUserInfos(response.user));
         console.log("response.user :", response.user);
          MyAlert({
-            title: "Erreur",
+            title: "Success",
             text:"Profil mis à jour avec succès !",
-            icon: "erreur",
+            icon: "success",
           });
         setEditMode(false);
       }
@@ -72,7 +72,7 @@ const ProfilStudent = () => {
         MyAlert({
             title: "Erreur",
             text:"Erreur lors de la mise à jour du profil : " + err.message,
-            icon: "erreur",
+            icon: "error",
           });
     }
   };

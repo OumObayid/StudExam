@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { selectFilieres } from "../../redux/filiereSlice";
 import { selectNiveaux } from "../../redux/niveauSlice";
 import { register } from "../../services/auth";
-import { Link } from "react-router-dom";
+import MyButton from "../../components/button/MyButton";
+import { Link, useNavigate } from "react-router-dom";
+import { MyAlert } from "../../components/myconfirm/MyAlert";
 
 function Register() {
   const filieres = useSelector(selectFilieres);
@@ -21,16 +23,38 @@ function Register() {
   const [typeMembre, setTypeMembre] = useState("");
   const [idNiveau, setIdNiveau] = useState("");
   const [idFiliere, setIdFiliere] = useState("");
-  const [message, setMessage] = useState(null);
-  const [success, setSuccess] = useState(false);
 
+  const navigate = useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (password !== passwordConf) {
-      setMessage("Les mots de passe ne correspondent pas.");
-      setSuccess(false);
+      MyAlert({
+        title: "Erreur",
+        text: "Les mots de passe ne correspondent pas.",
+        icon: "error",
+      });
       return;
+    }
+    if (
+      !cin ||
+      !password ||
+      !passwordConf ||
+      !nom ||
+      !prenom ||
+      !dateNaissance ||
+      !adresse ||
+      !email ||
+      !tel ||
+      !typeMembre ||
+      !idNiveau ||
+      !idFiliere
+    ) {
+      MyAlert({
+        title: "Attention",
+        text: "Veuillez remplir tous les champs !",
+        icon: "warning",
+      });
     }
 
     try {
@@ -51,226 +75,225 @@ function Register() {
       const data = await register(user);
 
       if (data.success) {
-        setMessage("Inscription réussie ! Vous pouvez vous connecter.");
-        setSuccess(true);
-
-        setCin("");
-        setPassword("");
-        setPasswordConf("");
-        setNom("");
-        setPrenom("");
-        setDateNaissance("");
-        setAdresse("");
-        setEmail("");
-        setTel("");
-        setTypeMembre("");
-        setIdNiveau("");
-        setIdFiliere("");
+        MyAlert({
+          title: "Success",
+          text: "Inscription réussie ! Vous pouvez vous connecter.",
+          icon: "success",
+        });
+         navigate("/login");
       } else {
-        setMessage(data.message || "Erreur lors de l'inscription.");
-        setSuccess(false);
+              MyAlert({
+          title: "Success",
+          text: `${data.message} || "Erreur lors de l'inscription."`,
+          icon: "success",
+        });
       }
     } catch (error) {
-      setMessage(error.message);
-      setSuccess(false);
+          MyAlert({
+          title: "Success",
+          text: error.message,
+          icon: "success",
+        });
     }
   };
 
   return (
-    <div className="container mt-5">
-      <h2>Inscription</h2>
+    <section className="section-auth px-2 row">
+      <div className="form-box-register col-12 col-md-6">
+        <form onSubmit={handleSubmit} autoComplete="off">
+          <h2 className="h2-auth mt-4">Inscription</h2>
 
-      <form onSubmit={handleSubmit}>
-        {/* Type de membre */}
-        <div className="mb-3">
-          <label htmlFor="typeMembre" className="form-label">Type de membre</label>
-          <select
-            id="typeMembre"
-            className="form-select form-select-sm"
-            value={typeMembre}
-            onChange={(e) => setTypeMembre(e.target.value)}
-            required
-          >
-            <option value="">Etudiant ou Instructeur?</option>
-            <option value="Student">Etudiant</option>
-            <option value="Instructor">Instructeur</option>
-          </select>
-        </div>
-
-        {/* Nom */}
-        <div className="mb-3">
-          <label htmlFor="nom" className="form-label">Nom</label>
-          <input
-            id="nom"
-            type="text"
-            className="form-control form-control-sm"
-            value={nom}
-            onChange={(e) => setNom(e.target.value)}
-            required
-          />
-        </div>
-
-        {/* Prénom */}
-        <div className="mb-3">
-          <label htmlFor="prenom" className="form-label">Prénom</label>
-          <input
-            id="prenom"
-            type="text"
-            className="form-control form-control-sm"
-            value={prenom}
-            onChange={(e) => setPrenom(e.target.value)}
-            required
-          />
-        </div>
-
-        {/* Date de naissance */}
-        <div className="mb-3">
-          <label htmlFor="dateNaissance" className="form-label">Date de naissance</label>
-          <input
-            id="dateNaissance"
-            type="date"
-            className="form-control form-control-sm"
-            value={dateNaissance}
-            onChange={(e) => setDateNaissance(e.target.value)}
-            required
-          />
-        </div>
-
-        {/* Adresse */}
-        <div className="mb-3">
-          <label htmlFor="adresse" className="form-label">Adresse</label>
-          <input
-            id="adresse"
-            type="text"
-            className="form-control form-control-sm"
-            value={adresse}
-            onChange={(e) => setAdresse(e.target.value)}
-            required
-          />
-        </div>
-
-        {/* Email */}
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">Email</label>
-          <input
-            id="email"
-            type="email"
-            className="form-control form-control-sm"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-
-        {/* Téléphone */}
-        <div className="mb-3">
-          <label htmlFor="tel" className="form-label">Téléphone</label>
-          <input
-            id="tel"
-            type="text"
-            className="form-control form-control-sm"
-            value={tel}
-            onChange={(e) => setTel(e.target.value)}
-            required
-          />
-        </div>
-
-        {/* CIN */}
-        <div className="mb-3">
-          <label htmlFor="cin" className="form-label">CIN</label>
-          <input
-            id="cin"
-            type="text"
-            className="form-control form-control-sm"
-            value={cin}
-            onChange={(e) => setCin(e.target.value)}
-            required
-          />
-        </div>
-
-        {/* Filière et Niveau */}
-        {typeMembre === "Student" && (
-          <>
-            <div className="mb-3">
-              <label htmlFor="filiere" className="form-label">Filière</label>
+          {/* type membre */}
+          <div className="row g-3 mb-md-3">
+            <div className="col-12">
               <select
-                id="filiere"
-                className="form-select form-select-sm"
-                value={idFiliere}
-                onChange={(e) => setIdFiliere(e.target.value)}
+                id="typeMembre"
+                className="select-auth form-select form-select-sm"
+                value={typeMembre}
+                onChange={(e) => setTypeMembre(e.target.value)}
                 required
               >
-                <option value="">-- Choisir --</option>
-                {filieres.map((filiere) => (
-                  <option key={filiere.IdFiliere} value={filiere.IdFiliere}>
-                    {filiere.NomFiliere || filiere.IdFiliere}
-                  </option>
-                ))}
+                <option value="">Etudiant ou Instructeur?</option>
+                <option value="Student">Etudiant</option>
+                <option value="Instructor">Instructeur</option>
               </select>
             </div>
-
-            <div className="mb-3">
-              <label htmlFor="niveau" className="form-label">Niveau</label>
-              <select
-                id="niveau"
-                className="form-select form-select-sm"
-                value={idNiveau}
-                onChange={(e) => setIdNiveau(e.target.value)}
-                required
-              >
-                <option value="">-- Choisir --</option>
-                {niveaux.map((niveau) => (
-                  <option key={niveau.IdNiveau} value={niveau.IdNiveau}>
-                    {niveau.NomNiveau || niveau.IdNiveau}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </>
-        )}
-
-        {/* Mot de passe */}
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">Mot de passe</label>
-          <input
-            id="password"
-            type="password"
-            className="form-control form-control-sm"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-
-        {/* Confirmation mot de passe */}
-        <div className="mb-3">
-          <label htmlFor="passwordConf" className="form-label">Confirmer le mot de passe</label>
-          <input
-            id="passwordConf"
-            type="password"
-            className="form-control form-control-sm"
-            value={passwordConf}
-            onChange={(e) => setPasswordConf(e.target.value)}
-            required
-          />
-        </div>
-
-        {message && (
-          <div className={`alert ${success ? "alert-success" : "alert-danger"}`}>
-            {message}{" "}
-            {success && (
-              <Link to="/login" className="alert-link">
-                Se connecter
-              </Link>
-            )}
           </div>
-        )}
 
-        <button type="submit" className="btn btn-primary">
-          S'inscrire
-        </button>
-      </form>
-    </div>
+          {/* Filière et Niveau */}
+          {typeMembre === "Student" && (
+            <div className="row g-3 mb-2 mt-0">
+              <div className="col-12 col-md-6">
+                <select
+                  id="filiere"
+                  className="select-auth form-select form-select-sm"
+                  value={idFiliere}
+                  onChange={(e) => setIdFiliere(e.target.value)}
+                  required
+                >
+                  <option value="">-- Filière --</option>
+                  {filieres.map((filiere) => (
+                    <option key={filiere.IdFiliere} value={filiere.IdFiliere}>
+                      {filiere.NomFiliere || filiere.IdFiliere}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-12 col-md-6">
+                <select
+                  id="niveau"
+                  className="select-auth form-select form-select-sm"
+                  value={idNiveau}
+                  onChange={(e) => setIdNiveau(e.target.value)}
+                  required
+                >
+                  <option value="">-- Niveau --</option>
+                  {niveaux.map((niveau) => (
+                    <option key={niveau.IdNiveau} value={niveau.IdNiveau}>
+                      {niveau.NomNiveau || niveau.IdNiveau}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
+
+          {/* nom et prénom */}
+          <div className=" d-md-flex justify-content-md-center gap-md-3 mx-0">
+            <div className="inputbox">
+              <i className="icone-i bi bi-person"></i>
+              <input
+                value={nom}
+                onChange={(e) => setNom(e.target.value)}
+                className="input-auth"
+                type="text"
+                required
+                autoComplete="off"
+              />
+              <label>Nom</label>
+            </div>
+            <div className="inputbox">
+              <i className="icone-i bi bi-person"></i>
+              <input
+                value={prenom}
+                onChange={(e) => setPrenom(e.target.value)}
+                className="input-auth"
+                type="text"
+                required
+              />
+              <label>Prénom</label>
+            </div>
+          </div>
+
+          {/* cin et date de naissance  */}
+          <div className=" d-md-flex justify-content-md-center gap-md-3 mx-0">
+            <div className="inputbox">
+              <i className="icone-i bi bi-credit-card"></i>
+              <input
+                value={cin}
+                onChange={(e) => setCin(e.target.value)}
+                className="input-auth"
+                type="text"
+                required
+              />
+              <label>Cin d'identité</label>
+            </div>
+            <div className=" inputbox">
+              <i className="icone-i bi bi-calendar"></i>
+              <input
+                value={dateNaissance}
+                onChange={(e) => setDateNaissance(e.target.value)}
+                className="input-auth"
+                type="date"
+                required
+              />
+              <label>Date de naissance</label>
+            </div>
+          </div>
+
+          {/* email et téléphone */}
+          <div className=" d-md-flex justify-content-md-center gap-md-3 mx-0">
+            <div className=" inputbox">
+              <i className="icone-i bi bi-envelope"></i>
+              <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="input-auth"
+                type="text"
+                required
+              />
+              <label>Email</label>
+            </div>
+            <div className="inputbox">
+              <i className="icone-i bi bi-telephone"></i>
+              <input
+                value={tel}
+                onChange={(e) => setTel(e.target.value)}
+                className="input-auth"
+                type="text"
+                required
+              />
+              <label>Téléphone</label>
+            </div>
+          </div>
+
+          {/* adresse */}
+          <div className=" d-md-flex justify-content-md-center gap-md-3 mx-0">
+            <div className="inputbox">
+              <i className="icone-i bi bi-house"></i>
+              <input
+                value={adresse}
+                onChange={(e) => setAdresse(e.target.value)}
+                className="input-auth"
+                type="text"
+                required
+              />
+              <label>Adresse</label>
+            </div>
+          </div>
+
+          {/* confirmation mot de passe */}
+          <div className=" d-md-flex justify-content-md-center gap-md-3 mx-0">
+            <div className="inputbox">
+              <i className="icone-i bi bi-lock"></i>
+              <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input-auth"
+                type="password"
+                required
+              />
+              <label>Mot de passe</label>
+            </div>
+            <div className="inputbox">
+              <i className="icone-i bi bi-lock"></i>
+              <input
+                value={passwordConf}
+                onChange={(e) => setPasswordConf(e.target.value)}
+                className="input-auth"
+                type="password"
+                required
+              />
+              <label>Confirmer Mot de passe</label>
+            </div>
+          </div>
+
+          <MyButton
+            styleNm={{ color: "var(--dore-clear" }}
+            classNm="button-auth mt-3"
+            typeNm="submit"
+          >
+            S'inscrire
+          </MyButton>
+
+          <div className="register mt-3">
+            <p>
+              Vous avez un compte? <Link to="/login">Se connecter</Link>
+            </p>
+          </div>
+        </form>
+      </div>
+    </section>
   );
 }
 
